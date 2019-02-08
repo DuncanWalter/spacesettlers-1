@@ -3,10 +3,10 @@ package spacesettlers.objects.powerups;
 import spacesettlers.objects.AbstractActionableObject;
 
 /**
- * Double the maximum energy available on the actionable object
- * It is free to use (no energy penalty).  After it is used, it is 
- * removed from the list of valid power ups for that object (or it
- * would be used again and again)
+ * Double the maximum energy available on the actionable object It is free to
+ * use (no energy penalty). After it is used, it is removed from the list of
+ * valid power ups for that object (or it would be used again and again)
+ * 
  * @author amy
  *
  */
@@ -26,7 +26,7 @@ public final class PowerupDoubleMaxEnergy implements SpaceSettlersPowerup {
 	 */
 	@Override
 	public int getCostToUse() {
-			return 0;
+		return 0;
 	}
 
 	@Override

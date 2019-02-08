@@ -8,7 +8,7 @@ public class TeamRecordComparator implements Comparator {
 	public int compare(Object obj1, Object obj2) {
 		TeamRecord team1 = (TeamRecord) obj1;
 		TeamRecord team2 = (TeamRecord) obj2;
-		
+
 		if (team1.getAverageScore() > team2.getAverageScore()) {
 			return -1;
 		} else if (team1.getAverageScore() < team2.getAverageScore()) {
@@ -16,7 +16,7 @@ public class TeamRecordComparator implements Comparator {
 		} else {
 			return 0;
 		}
-		
+
 	}
 
 }

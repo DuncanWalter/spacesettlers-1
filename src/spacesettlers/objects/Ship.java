@@ -15,7 +15,8 @@ import spacesettlers.simulator.Toroidal2DPhysics;
 import spacesettlers.utilities.Position;
 
 /**
- * A spacewar ship is the main object in the simulator as it is the one the agents/clients control.
+ * A spacewar ship is the main object in the simulator as it is the one the
+ * agents/clients control.
  * 
  * @author amy
  */
@@ -53,24 +54,24 @@ public class Ship extends AbstractActionableObject {
 	Color teamColor;
 
 	/**
-	 * Number of weapons in the air (this is reset by the sim
-	 * when bullets explode or reach their target)
+	 * Number of weapons in the air (this is reset by the sim when bullets explode
+	 * or reach their target)
 	 */
 	int numWeaponsInAir;
-	
+
 	/**
 	 * Does the ship currently have a flag?
 	 */
 	boolean carryingFlag;
-	
+
 	/**
 	 * Reference to the flag the ship has (if it has one)
 	 */
 	Flag flag;
 
-
 	/**
-	 * Make a new ship for the specified team.  
+	 * Make a new ship for the specified team.
+	 * 
 	 * @param teamName
 	 */
 	public Ship(String teamName, Color teamColor, Position location) {
@@ -98,6 +99,7 @@ public class Ship extends AbstractActionableObject {
 
 	/**
 	 * Deep copy of a ship (used for security)
+	 * 
 	 * @return
 	 */
 	public Ship deepClone() {
@@ -124,14 +126,13 @@ public class Ship extends AbstractActionableObject {
 		newShip.carryingFlag = carryingFlag;
 		newShip.numFlags = numFlags;
 		newShip.isShielded = isShielded;
-		newShip.numCores = numCores; 
-		
-		if (this.flag != null){
+		newShip.numCores = numCores;
+
+		if (this.flag != null) {
 			newShip.flag = flag.deepClone();
 		}
 		return newShip;
 	}
-
 
 	/**
 	 * Resets the ship energy to the initial level
@@ -140,18 +141,19 @@ public class Ship extends AbstractActionableObject {
 		energy = SHIP_INITIAL_ENERGY;
 	}
 
-
 	/**
-	 * Is the ship carrying a flag right now?  True if so.  False otherwise.
+	 * Is the ship carrying a flag right now? True if so. False otherwise.
 	 * 
 	 * @return
 	 */
 	public boolean isCarryingFlag() {
 		return carryingFlag;
 	}
-	
+
 	/**
-	 * Get the flag (this is a deep clone from the client point of view) of the flag the ship is carrying
+	 * Get the flag (this is a deep clone from the client point of view) of the flag
+	 * the ship is carrying
+	 * 
 	 * @return
 	 */
 	public Flag getFlag() {
@@ -167,11 +169,12 @@ public class Ship extends AbstractActionableObject {
 		this.flag = flag;
 		this.carryingFlag = true;
 		this.incrementFlags();
-		//System.out.println("Ship " + this + " has a flag now");
+		// System.out.println("Ship " + this + " has a flag now");
 	}
-	
+
 	/**
 	 * Get the color of this team
+	 * 
 	 * @return
 	 */
 	public Color getTeamColor() {
@@ -179,8 +182,9 @@ public class Ship extends AbstractActionableObject {
 	}
 
 	/**
-	 * Returns a new weapon of the requested type if the ship is allowed to
-	 * fire a new one.  Otherwise returns null.
+	 * Returns a new weapon of the requested type if the ship is allowed to fire a
+	 * new one. Otherwise returns null.
+	 * 
 	 * @param weaponType weapon type to fire
 	 * 
 	 * @return a valid weapon or null if the ship is out of weapons at the moment
@@ -193,14 +197,14 @@ public class Ship extends AbstractActionableObject {
 			} else if (weaponType == SpaceSettlersPowerupEnum.FIRE_EMP) {
 				return new EMP(weaponPosition, this);
 			}
-		} 
+		}
 		return null;
 	}
 
 	/**
 	 * Increment the weapons in play
 	 */
-	public void incrementWeaponCount(){
+	public void incrementWeaponCount() {
 		numWeaponsInAir++;
 	}
 
@@ -218,68 +222,68 @@ public class Ship extends AbstractActionableObject {
 	 */
 	public void setDeadAndDropObjects(Random rand, Toroidal2DPhysics space) {
 		respawnCounter = Math.min(lastRespawnCounter + RESPAWN_INCREMENT, MAX_RESPAWN_INTERVAL);
-		lastRespawnCounter = respawnCounter; 
+		lastRespawnCounter = respawnCounter;
 		resetResources();
 		resetPowerups();
 		if (carryingFlag) {
 			dropFlag(rand, space);
 		}
-		resetAiCores(); 
+		resetAiCores();
 		super.setAlive(false);
 	}
 
-
 	/**
-	 * Ships need to behave slightly differently when set to dead or respawned 
-	 * so this is an override of the abstract class
+	 * Ships need to behave slightly differently when set to dead or respawned so
+	 * this is an override of the abstract class
 	 */
 	public void setAlive(boolean value) {
 		if (value == false) {
 			respawnCounter = Math.min(lastRespawnCounter + RESPAWN_INCREMENT, MAX_RESPAWN_INTERVAL);
-			lastRespawnCounter = respawnCounter; 
+			lastRespawnCounter = respawnCounter;
 			resetResources();
 			resetPowerups();
-			resetAiCores(); 
+			resetAiCores();
 		} else {
 			resetEnergy();
 		}
 
 		super.setAlive(value);
 	}
-	
+
 	/**
-	 * Drop all the cores by resetting to 0
-	 * Will also need code inside physics sim to drop all AiCores
+	 * Drop all the cores by resetting to 0 Will also need code inside physics sim
+	 * to drop all AiCores
 	 */
 	public void resetAiCores() {
-		//Just erase the core count, as we are not currently tracking the specific cores held by a ship.
+		// Just erase the core count, as we are not currently tracking the specific
+		// cores held by a ship.
 		numCores = 0;
 		/*
-		 * From Josiah: In the future the ship may drop any AiCores it is holding, however I don't currently
-		 * have a good strategy for releasing the cores of a ship holding a very large number of cores.
-		 * For example, if a ship is holding 8 cores and dies, spawning those cores leads to a bunch of
-		 * interesting collisions and several of the cores tend to end up destroyed.
-		 * Perhaps limit a ship to carrying a certain number of cores?
+		 * From Josiah: In the future the ship may drop any AiCores it is holding,
+		 * however I don't currently have a good strategy for releasing the cores of a
+		 * ship holding a very large number of cores. For example, if a ship is holding
+		 * 8 cores and dies, spawning those cores leads to a bunch of interesting
+		 * collisions and several of the cores tend to end up destroyed. Perhaps limit a
+		 * ship to carrying a certain number of cores?
 		 */
 	}
-	
+
 	/**
 	 * A ship has collided with a core and collected it.
 	 */
 	public void incrementCores() {
-		super.incrementCores(1);//herr0861 edit
+		super.incrementCores(1);// herr0861 edit
 	}
-	
+
 	/**
 	 * A ship drops the flag when it dies
 	 */
 	private void dropFlag(Random rand, Toroidal2DPhysics space) {
-		//System.out.println("Dropping flag from ship");
+		// System.out.println("Dropping flag from ship");
 		carryingFlag = false;
 		flag.dropFlag(rand, space);
 		flag = null;
 	}
-	
 
 	/**
 	 * When an item dies, its power ups disappear
@@ -289,9 +293,9 @@ public class Ship extends AbstractActionableObject {
 		currentPowerups.add(SpaceSettlersPowerupEnum.FIRE_MISSILE);
 	}
 
-
 	/**
 	 * Return the number of beacons picked up by this ship
+	 * 
 	 * @return
 	 */
 	public int getNumBeacons() {
@@ -307,6 +311,7 @@ public class Ship extends AbstractActionableObject {
 
 	/**
 	 * Get the action the ship is currently executing
+	 * 
 	 * @return
 	 */
 	public AbstractAction getCurrentAction() {
@@ -314,9 +319,9 @@ public class Ship extends AbstractActionableObject {
 	}
 
 	/**
-	 * Set the action the ship is currently executing
-	 * Note, this should only be done within the simulator and not
-	 * within the team client (where it will be ignored)
+	 * Set the action the ship is currently executing Note, this should only be done
+	 * within the simulator and not within the team client (where it will be
+	 * ignored)
 	 * 
 	 * @param currentAction
 	 */
@@ -325,8 +330,8 @@ public class Ship extends AbstractActionableObject {
 	}
 
 	public String toString() {
-		String str = "Ship id " + id + " team " + teamName + " at " + position + " resources " + resources + 
-				" flags: " + numFlags;
+		String str = "Ship id " + id + " team " + teamName + " at " + position + " resources " + resources + " flags: "
+				+ numFlags;
 		return str;
 	}
 
@@ -363,6 +368,6 @@ public class Ship extends AbstractActionableObject {
 		this.carryingFlag = false;
 		flag.depositFlag();
 		flag = null;
-	}		
+	}
 
 }

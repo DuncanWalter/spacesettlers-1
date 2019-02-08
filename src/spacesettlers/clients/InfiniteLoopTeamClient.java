@@ -15,8 +15,11 @@ import spacesettlers.objects.AbstractObject;
 import spacesettlers.objects.powerups.SpaceSettlersPowerupEnum;
 import spacesettlers.objects.resources.ResourcePile;
 import spacesettlers.simulator.Toroidal2DPhysics;
+
 /**
- * Bad client that infinite loops (used to test threading, don't run this one for real!)
+ * Bad client that infinite loops (used to test threading, don't run this one
+ * for real!)
+ * 
  * @author amy
  *
  */
@@ -38,19 +41,19 @@ public class InfiniteLoopTeamClient extends TeamClient {
 			Set<AbstractActionableObject> actionableObjects) {
 		HashMap<UUID, AbstractAction> actions = new HashMap<UUID, AbstractAction>();
 		for (AbstractObject actionable : actionableObjects) {
-				actions.put(actionable.getId(), new DoNothingAction());
+			actions.put(actionable.getId(), new DoNothingAction());
 		}
-		
+
 		while (true) {
-			
+
 		}
-		
+
 	}
 
 	@Override
 	public void getMovementEnd(Toroidal2DPhysics space, Set<AbstractActionableObject> actionableObjects) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -59,16 +62,14 @@ public class InfiniteLoopTeamClient extends TeamClient {
 		return null;
 	}
 
-
 	@Override
 	/**
 	 * Infinite never gets to purchases
 	 */
 	public Map<UUID, PurchaseTypes> getTeamPurchases(Toroidal2DPhysics space,
-			Set<AbstractActionableObject> actionableObjects, 
-			ResourcePile resourcesAvailable, 
+			Set<AbstractActionableObject> actionableObjects, ResourcePile resourcesAvailable,
 			PurchaseCosts purchaseCosts) {
-		return new HashMap<UUID,PurchaseTypes>();
+		return new HashMap<UUID, PurchaseTypes>();
 
 	}
 

@@ -10,49 +10,50 @@ import spacesettlers.simulator.Toroidal2DPhysics;
 import spacesettlers.utilities.Position;
 
 /**
- * Flag object - used for capture the flag.  Teams can:
- * 1) touch their own flag and cause it to move to a different starting location in its list
- * 2) pick up the flag of the other team and put it in their ship.
+ * Flag object - used for capture the flag. Teams can: 1) touch their own flag
+ * and cause it to move to a different starting location in its list 2) pick up
+ * the flag of the other team and put it in their ship.
  * 
- * If a flag is being carried inside a ship that dies, the flag drops where the ship died.  
- * If the flag is carried to the other team's base, it restarts back at one of its starting locations.
+ * If a flag is being carried inside a ship that dies, the flag drops where the
+ * ship died. If the flag is carried to the other team's base, it restarts back
+ * at one of its starting locations.
  * 
  * @author amy
  */
 public class Flag extends AbstractObject {
-    public static final int FLAG_RADIUS = 10;
-    public static final int FLAG_MASS = 100;
+	public static final int FLAG_RADIUS = 10;
+	public static final int FLAG_MASS = 100;
 
-    /**
-	 * The name of the team that this flag belongs to 
+	/**
+	 * The name of the team that this flag belongs to
 	 */
 	String teamName;
-	
+
 	/**
 	 * The color of this team
 	 */
 	Color teamColor;
-	
+
 	/**
 	 * The team that owns this base
 	 */
 	Team team;
-	
+
 	/**
 	 * The list of starting locations for the flag
 	 */
 	Position[] startingLocations;
 
 	/**
-	 * Is the flag being carried?  Changes its graphics
+	 * Is the flag being carried? Changes its graphics
 	 */
 	boolean beingCarried;
-	
+
 	/**
 	 * Reference to the ship/drone carrying the flag (if it is being carried)
 	 */
 	AbstractObject carryingShipOrDrone;
-	
+
 	/**
 	 * Create a new flag
 	 * 
@@ -72,7 +73,7 @@ public class Flag extends AbstractObject {
 		this.isMoveable = true;
 		// copy the locations to avoid exploits
 		this.startingLocations = new Position[startingLocations.length];
-		for (int i = 0; i < startingLocations.length; i++) { 
+		for (int i = 0; i < startingLocations.length; i++) {
 			this.startingLocations[i] = startingLocations[i].deepCopy();
 		}
 		this.beingCarried = false;
@@ -112,10 +113,10 @@ public class Flag extends AbstractObject {
 	public boolean isBeingCarried() {
 		return beingCarried;
 	}
-	
+
 	/**
-	 * Set the flag to being carried by this drone
-	 * Doing so removes it from any ship that may be carrying it.
+	 * Set the flag to being carried by this drone Doing so removes it from any ship
+	 * that may be carrying it.
 	 * 
 	 * @param ship
 	 */
@@ -126,9 +127,9 @@ public class Flag extends AbstractObject {
 		this.setDrawable(false);
 		this.setRespawn(false);
 		this.setAlive(false);
-		
+
 	}
-	
+
 	/**
 	 * Set the flag to being carried by this ship
 	 * 
@@ -141,22 +142,21 @@ public class Flag extends AbstractObject {
 		this.setDrawable(false);
 		this.setRespawn(false);
 		this.setAlive(false);
-		
+
 	}
-	
+
 	/**
 	 * Drop the flag (likely the ship died)
 	 */
 	public void dropFlag(Random rand, Toroidal2DPhysics space) {
-		//System.out.println("Flag being dropped at " + carryingShip.getPosition());
+		// System.out.println("Flag being dropped at " + carryingShip.getPosition());
 		this.beingCarried = false;
 		this.setDrawable(true);
 		this.setAlive(true);
 		this.setRespawn(false);
-		
-		Position newPosition = space.getRandomFreeLocationInRegion(rand, this.getRadius(), 
-				(int) carryingShipOrDrone.getPosition().getX(), 
-				(int) carryingShipOrDrone.getPosition().getY(), 200);
+
+		Position newPosition = space.getRandomFreeLocationInRegion(rand, this.getRadius(),
+				(int) carryingShipOrDrone.getPosition().getX(), (int) carryingShipOrDrone.getPosition().getY(), 200);
 		newPosition.setAngularVelocity(carryingShipOrDrone.getPosition().getAngularVelocity());
 		newPosition.setTranslationalVelocity(carryingShipOrDrone.getPosition().getTranslationalVelocity());
 		this.setPosition(newPosition);
@@ -164,8 +164,8 @@ public class Flag extends AbstractObject {
 	}
 
 	/**
-	 * Deposit a flag at the base.  For now, that kills a flag
-	 * and sets it to not being carried.  It will regenerate on the next timestep.
+	 * Deposit a flag at the base. For now, that kills a flag and sets it to not
+	 * being carried. It will regenerate on the next timestep.
 	 */
 	public void depositFlag() {
 		this.beingCarried = false;
@@ -173,9 +173,10 @@ public class Flag extends AbstractObject {
 		this.setDrawable(false);
 		this.setRespawn(true);
 	}
-	
+
 	/**
 	 * Get a new random Starting location
+	 * 
 	 * @param random
 	 * @return
 	 */
@@ -191,8 +192,5 @@ public class Flag extends AbstractObject {
 	public Position[] getStartingLocations() {
 		return startingLocations;
 	}
-	
-	
-	
 
 }

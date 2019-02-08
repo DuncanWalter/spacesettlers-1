@@ -11,15 +11,16 @@ import spacesettlers.utilities.Position;
 
 /**
  * A base for a team
+ * 
  * @author amy
  *
  */
 public class Base extends AbstractActionableObject {
-    public static final int BASE_RADIUS = 10;
-    public static final int BASE_MASS = 1000;
-    public static final int INITIAL_BASE_ENERGY = 5000;
-    public static final int INITIAL_ENERGY_HEALING_INCREMENT = 1;
-    
+	public static final int BASE_RADIUS = 10;
+	public static final int BASE_MASS = 1000;
+	public static final int INITIAL_BASE_ENERGY = 5000;
+	public static final int INITIAL_ENERGY_HEALING_INCREMENT = 1;
+
 	/**
 	 * The color of this team
 	 */
@@ -29,19 +30,19 @@ public class Base extends AbstractActionableObject {
 	 * The team that owns this base
 	 */
 	Team team;
-	
+
 	/**
-	 * true if this is a home base for a team (which therefore can't be killed) or false if it is a supplementary
-	 * base.
+	 * true if this is a home base for a team (which therefore can't be killed) or
+	 * false if it is a supplementary base.
 	 */
 	boolean isHomeBase;
-	
+
 	/**
-	 * How many units of energy heal at each time step (can be changed with power ups)
+	 * How many units of energy heal at each time step (can be changed with power
+	 * ups)
 	 */
 	int healingIncrement;
-	
-	
+
 	public Base(Position location, String teamName, Team team, boolean isHomeBase) {
 		super(BASE_MASS, BASE_RADIUS, location);
 		this.teamName = teamName;
@@ -63,7 +64,7 @@ public class Base extends AbstractActionableObject {
 	 */
 	public Base deepClone() {
 		Base newBase = new Base(getPosition().deepCopy(), teamName, team.deepCopy(), isHomeBase);
-		
+
 		newBase.energy = energy;
 		newBase.setAlive(isAlive);
 		newBase.id = id;
@@ -81,39 +82,45 @@ public class Base extends AbstractActionableObject {
 
 	/**
 	 * Get the team
+	 * 
 	 * @return
 	 */
 	public Team getTeam() {
 		return team;
 	}
-	
+
 	/**
 	 * Increments the number of cores collected by this base by the number provided.
+	 * 
 	 * @param numCores
 	 */
-	public void incrementCores(int numCores) { 
+	public void incrementCores(int numCores) {
 		super.incrementCores(numCores);
 		team.incrementCoresCollected(numCores);
 	}
-	
+
 	/**
 	 * Return half of the base's energy
+	 * 
 	 * @return the healingEnergy
 	 */
 	public int getHealingEnergy() {
 		return (energy / 2);
 	}
-	
+
 	/**
-	 * Returns true if this is a home base for a team and false if it is a secondary base
+	 * Returns true if this is a home base for a team and false if it is a secondary
+	 * base
+	 * 
 	 * @return
 	 */
 	public boolean isHomeBase() {
 		return isHomeBase;
 	}
-	
+
 	/**
 	 * Get the speed at which this base heals (per time step)
+	 * 
 	 * @return
 	 */
 	public int getHealingIncrement() {
@@ -122,6 +129,7 @@ public class Base extends AbstractActionableObject {
 
 	/**
 	 * Set the speed at which this base heals (done in the power up)
+	 * 
 	 * @param healingIncrement
 	 */
 	public void setHealingIncrement(int healingIncrement) {
@@ -129,22 +137,22 @@ public class Base extends AbstractActionableObject {
 	}
 
 	/**
-	 * Change the resourcesAvailable amount by the specified amount.  Resources live
-	 * at a base but are available to the whole team once they arrive at a base.  
+	 * Change the resourcesAvailable amount by the specified amount. Resources live
+	 * at a base but are available to the whole team once they arrive at a base.
 	 * Method is overridden to add things to the team also.
 	 * 
 	 * @param difference
 	 */
 	public void addResources(ResourcePile newResources) {
 		super.addResources(newResources);
-		
+
 		// and increment the resources for the entire team
 		team.incrementTotalResources(newResources);
 		team.incrementAvailableResources(newResources);
 	}
-	
+
 	/**
-	 * Add a flag to this team.  The flag itself is then killed so it can regenerate.
+	 * Add a flag to this team. The flag itself is then killed so it can regenerate.
 	 * 
 	 * @param flag
 	 */
@@ -153,22 +161,22 @@ public class Base extends AbstractActionableObject {
 		super.incrementFlags();
 		team.incrementTotalFlagsCollected();
 	}
-	
 
 	/**
 	 * Change the healing energy (from a collision or just time healing it)
+	 * 
 	 * @param difference
 	 */
 	public void updateEnergy(int difference) {
 		energy += difference;
-		
+
 		if (energy < 0) {
 			energy = 0;
 			if (!isHomeBase) {
 				setAlive(false);
 			}
 		}
-		
+
 		if (energy > maxEnergy) {
 			energy = maxEnergy;
 		}

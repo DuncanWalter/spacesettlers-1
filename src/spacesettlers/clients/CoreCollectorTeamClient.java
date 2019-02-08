@@ -23,9 +23,9 @@ import spacesettlers.simulator.Toroidal2DPhysics;
 import spacesettlers.utilities.Position;
 
 /**
- * Assigns each member of the team to collect a core.  If there 
- * are more core than team members, the remaining ones do nothing.
- *  
+ * Assigns each member of the team to collect a core. If there are more core
+ * than team members, the remaining ones do nothing.
+ * 
  * @author amy
  */
 public class CoreCollectorTeamClient extends TeamClient {
@@ -43,11 +43,11 @@ public class CoreCollectorTeamClient extends TeamClient {
 		HashMap<UUID, AbstractAction> actions = new HashMap<UUID, AbstractAction>();
 
 		// loop through each ship
-		for (AbstractObject actionable :  actionableObjects) {
+		for (AbstractObject actionable : actionableObjects) {
 			if (actionable instanceof Ship) {
 				Ship ship = (Ship) actionable;
 				AbstractAction current = ship.getCurrentAction();
-				
+
 				// if the ship has a core, take it to base
 				if (ship.getNumCores() > 0) {
 					Base base = findNearestBase(space, ship);
@@ -58,9 +58,9 @@ public class CoreCollectorTeamClient extends TeamClient {
 					if (current == null || !shipToCoreMap.containsKey(ship)) {
 						Position currentPosition = ship.getPosition();
 						AiCore core = pickNearestFreeCore(space, ship);
-	
+
 						AbstractAction newAction = null;
-	
+
 						if (core == null) {
 							// there is no core available so do nothing
 							newAction = new DoNothingAction();
@@ -78,7 +78,7 @@ public class CoreCollectorTeamClient extends TeamClient {
 						Position currentPosition = ship.getPosition();
 						AbstractAction newAction = null;
 						newAction = new MoveToObjectAction(space, currentPosition, myCore);
-						
+
 						actions.put(ship.getId(), newAction);
 					}
 				}
@@ -114,9 +114,9 @@ public class CoreCollectorTeamClient extends TeamClient {
 		return nearestBase;
 	}
 
-
 	/**
 	 * Find the nearest free core to this ship
+	 * 
 	 * @param space
 	 * @param ship
 	 * @return
@@ -142,15 +142,12 @@ public class CoreCollectorTeamClient extends TeamClient {
 		return closestCore;
 	}
 
-
-
-
 	/**
 	 * Clean up data structure including core maps
 	 */
 	public void getMovementEnd(Toroidal2DPhysics space, Set<AbstractActionableObject> actionableObjects) {
 
-		// once a core has been picked up, remove it from the list 
+		// once a core has been picked up, remove it from the list
 		// of core being pursued (so it can be picked up at its
 		// new location)
 		for (AiCore core : space.getCores()) {
@@ -185,12 +182,10 @@ public class CoreCollectorTeamClient extends TeamClient {
 	 * Beacon collector never purchases
 	 */
 	public Map<UUID, PurchaseTypes> getTeamPurchases(Toroidal2DPhysics space,
-			Set<AbstractActionableObject> actionableObjects, 
-			ResourcePile resourcesAvailable, 
+			Set<AbstractActionableObject> actionableObjects, ResourcePile resourcesAvailable,
 			PurchaseCosts purchaseCosts) {
-		return new HashMap<UUID,PurchaseTypes>();
+		return new HashMap<UUID, PurchaseTypes>();
 	}
-
 
 	@Override
 	public Map<UUID, SpaceSettlersPowerupEnum> getPowerups(Toroidal2DPhysics space,

@@ -9,6 +9,7 @@ import spacesettlers.utilities.Vector2D;
 
 /**
  * A bullet/missle
+ * 
  * @author amy
  *
  */
@@ -18,13 +19,13 @@ public final class Missile extends AbstractWeapon {
 	public static final int MISSILE_RADIUS = 3;
 	public static final int MISSILE_MASS = 1;
 	public static final int INITIAL_VELOCITY = 100;
-	
+
 	/**
-	 * A new bullet with the specified position and shift
-	 * Needs to be shifted so it doesn't hit the ship it is firing from
+	 * A new bullet with the specified position and shift Needs to be shifted so it
+	 * doesn't hit the ship it is firing from
 	 */
 	public Missile(Position position, Ship firingShip) {
-		super(MISSILE_MASS, MISSILE_RADIUS, position, MISSILE_DAMAGE, MISSILE_COST,firingShip);
+		super(MISSILE_MASS, MISSILE_RADIUS, position, MISSILE_DAMAGE, MISSILE_COST, firingShip);
 		super.shiftWeaponFiringLocation(INITIAL_VELOCITY);
 		graphic = new MissileGraphics(this);
 		setDrawable(true);
@@ -59,19 +60,18 @@ public final class Missile extends AbstractWeapon {
 	}
 
 	/**
-	 * Apply the power up.  For a bullet,
-	 * the means unshielding the ship if it is shielded and updating the energy of the ship.
+	 * Apply the power up. For a bullet, the means unshielding the ship if it is
+	 * shielded and updating the energy of the ship.
 	 */
 	@Override
 	public void applyPowerup(AbstractActionableObject actionableObject) {
 		// can't fire with shields up so automatically drop them
 		actionableObject.setShielded(false);
-		
+
 		// only ships fire bullets (TODO: fix this when/if bases can)
 		Ship ship = (Ship) actionableObject;
 		ship.updateEnergy(getCostToUse());
 		ship.incrementWeaponCount();
 	}
-
 
 }

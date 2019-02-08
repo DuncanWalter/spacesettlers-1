@@ -5,7 +5,7 @@ public class TeamClientConfig {
 	 * fully qualified class name for the team
 	 */
 	String classname;
-	
+
 	/**
 	 * RGB components of the team colors (used for all the ships)
 	 */
@@ -17,12 +17,14 @@ public class TeamClientConfig {
 	String ladderName;
 
 	/**
-	 * The number of ships in the team.  Note, if this is bigger than the maximum number of allowable ships per team, it is ignored
+	 * The number of ships in the team. Note, if this is bigger than the maximum
+	 * number of allowable ships per team, it is ignored
 	 */
 	int numberInitialShipsInTeam;
-	
+
 	/**
-	 * Optional:  if the agent needs to read in from a file, it can specify the path to it here 
+	 * Optional: if the agent needs to read in from a file, it can specify the path
+	 * to it here
 	 */
 	String knowledgeFile;
 
@@ -74,8 +76,5 @@ public class TeamClientConfig {
 	public String getKnowledgeFile() {
 		return knowledgeFile;
 	}
-	
-	
-	
 
 }

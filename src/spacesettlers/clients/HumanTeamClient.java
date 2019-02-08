@@ -31,8 +31,10 @@ import spacesettlers.objects.resources.ResourcePile;
 import spacesettlers.simulator.Toroidal2DPhysics;
 import spacesettlers.utilities.Position;
 import spacesettlers.utilities.Vector2D;
+
 /**
  * The human client (parses key strokes to fly a single ship)
+ * 
  * @author amy
  *
  */
@@ -40,46 +42,45 @@ public class HumanTeamClient extends TeamClient {
 	public enum HumanKeyPressed {
 		UP, DOWN, RIGHT, LEFT, FIRE, NONE;
 	}
-	
+
 	/**
 	 * The last key pressed by the human (to be used in getting the action)
 	 */
 	HumanKeyPressed lastKeyPressed;
-	
+
 	private static double HUMAN_ACCEL = 5.0;
 	private static double HUMAN_TURN_ACCEL = 0.5;
-	
+
 	/**
 	 * The keyboard listener for the human client
 	 */
 	HumanClientKeyListener humanKeyListener;
-	
+
 	/**
 	 * The mouse listener for the human client
 	 */
 	HumanMouseListener humanMouseListener;
-	
+
 	/**
 	 * Last place the human clicked
 	 */
 	Position lastMouseClick;
-	
+
 	/**
 	 * The action to move to the last click
 	 */
 	AbstractAction mouseClickMove;
-	
+
 	/**
 	 * Minimum distance clicks need to be apart before it will move the ship again
 	 */
 	public double CLICK_DISTANCE = 5;
-	
+
 	/**
 	 * graphics to add in each step (if graphics are on, otherwise it is ignored)
 	 */
 	private ArrayList<SpacewarGraphics> graphicsToAdd;
-	
-	
+
 	@Override
 	public void initialize(Toroidal2DPhysics space) {
 		humanKeyListener = new HumanClientKeyListener();
@@ -110,44 +111,45 @@ public class HumanTeamClient extends TeamClient {
 				Vector2D currentVelocity = myPosition.getTranslationalVelocity();
 				RawAction action = null;
 				double angularVel = myPosition.getAngularVelocity();
-				
+
 				// if the key was up or down, accelerate along the current line
 				if (lastKeyPressed == HumanKeyPressed.UP) {
-					Vector2D newVel = new Vector2D(HUMAN_ACCEL * Math.cos(myPosition.getOrientation()), 
+					Vector2D newVel = new Vector2D(HUMAN_ACCEL * Math.cos(myPosition.getOrientation()),
 							HUMAN_ACCEL * Math.sin(myPosition.getOrientation()));
 					newVel.add(currentVelocity);
 					action = new RawAction(newVel, 0);
 				} else if (lastKeyPressed == HumanKeyPressed.DOWN) {
-					Vector2D newVel = new Vector2D(-HUMAN_ACCEL * Math.cos(myPosition.getOrientation()), 
+					Vector2D newVel = new Vector2D(-HUMAN_ACCEL * Math.cos(myPosition.getOrientation()),
 							-HUMAN_ACCEL * Math.sin(myPosition.getOrientation()));
 					newVel.add(currentVelocity);
 					action = new RawAction(newVel, 0);
 				}
-				
-				// if the key was right or left, turn 
+
+				// if the key was right or left, turn
 				if (lastKeyPressed == HumanKeyPressed.RIGHT) {
 					action = new RawAction(0, HUMAN_TURN_ACCEL);
 				} else if (lastKeyPressed == HumanKeyPressed.LEFT) {
 					action = new RawAction(0, -HUMAN_TURN_ACCEL);
 				}
-				
+
 				// was the mouse clicked?
 				if (lastMouseClick != null) {
-					if (mouseClickMove == null || mouseClickMove.isMovementFinished(space) || space.findShortestDistance(lastMouseClick, myPosition) > CLICK_DISTANCE) {
+					if (mouseClickMove == null || mouseClickMove.isMovementFinished(space)
+							|| space.findShortestDistance(lastMouseClick, myPosition) > CLICK_DISTANCE) {
 						mouseClickMove = new MoveAction(space, myPosition, lastMouseClick);
-						
+
 						graphicsToAdd.add(new StarGraphics(3, super.teamColor, lastMouseClick));
-						LineGraphics line = new LineGraphics(myPosition, lastMouseClick, 
+						LineGraphics line = new LineGraphics(myPosition, lastMouseClick,
 								space.findShortestDistanceVector(myPosition, lastMouseClick));
 						line.setLineColor(super.teamColor);
 						graphicsToAdd.add(line);
-						
+
 					}
 					actions.put(actionable.getId(), mouseClickMove);
 				} else {
 					actions.put(actionable.getId(), action);
 				}
-				
+
 			} else {
 				// can't really control anything but the ship
 				actions.put(actionable.getId(), new DoNothingAction());
@@ -183,14 +185,14 @@ public class HumanTeamClient extends TeamClient {
 
 	@Override
 	/**
-	 * Human purchases (right now it never purchases, this will be added to the UI later)
+	 * Human purchases (right now it never purchases, this will be added to the UI
+	 * later)
 	 */
 	public Map<UUID, PurchaseTypes> getTeamPurchases(Toroidal2DPhysics space,
-			Set<AbstractActionableObject> actionableObjects,
-			ResourcePile resourcesAvailable, 
+			Set<AbstractActionableObject> actionableObjects, ResourcePile resourcesAvailable,
 			PurchaseCosts purchaseCosts) {
 		// TODO Auto-generated method stub
-		return new HashMap<UUID,PurchaseTypes>();
+		return new HashMap<UUID, PurchaseTypes>();
 	}
 
 	@Override
@@ -199,30 +201,26 @@ public class HumanTeamClient extends TeamClient {
 		HashMap<UUID, SpaceSettlersPowerupEnum> powerUps = new HashMap<UUID, SpaceSettlersPowerupEnum>();
 
 		if (lastKeyPressed == HumanKeyPressed.FIRE) {
-			for (AbstractActionableObject actionableObject : actionableObjects){
+			for (AbstractActionableObject actionableObject : actionableObjects) {
 				SpaceSettlersPowerupEnum powerup = SpaceSettlersPowerupEnum.FIRE_MISSILE;
 				powerUps.put(actionableObject.getId(), powerup);
 			}
 		}
-		
+
 		return powerUps;
-	
+
 	}
 
 	@Override
 	public KeyAdapter getKeyAdapter() {
 		return humanKeyListener;
 	}
-	
 
 	/**
 	 * The key listener for the human client (internal class)
 	 * 
-	 * using any arrow keys (numeric or not):
-	 * 		up means accelerate forward
-	 * 		down means decelerate
-	 * 		right means turn right
-	 * 		left means turn left
+	 * using any arrow keys (numeric or not): up means accelerate forward down means
+	 * decelerate right means turn right left means turn left
 	 * 
 	 * space means fire
 	 * 
@@ -233,12 +231,12 @@ public class HumanTeamClient extends TeamClient {
 		@Override
 		public void keyPressed(KeyEvent e) {
 			int key = e.getKeyCode();
-			//System.out.println("human pressed " + key);
-			
+			// System.out.println("human pressed " + key);
+
 			if (key == KeyEvent.VK_UP || key == KeyEvent.VK_KP_UP) {
 				// UP means accelerate forward
 				lastKeyPressed = HumanKeyPressed.UP;
-				//System.out.println("human pressed UP ");
+				// System.out.println("human pressed UP ");
 			} else if (key == KeyEvent.VK_DOWN || key == KeyEvent.VK_KP_DOWN) {
 				// DOWN means decelerate
 				lastKeyPressed = HumanKeyPressed.DOWN;
@@ -252,7 +250,7 @@ public class HumanTeamClient extends TeamClient {
 				// fire
 				lastKeyPressed = HumanKeyPressed.FIRE;
 			}
-			
+
 			if (lastKeyPressed != null) {
 				lastMouseClick = null;
 			}
@@ -267,8 +265,8 @@ public class HumanTeamClient extends TeamClient {
 	}
 
 	/**
-	 * Human mouse interface.  To move, click somewhere on the screen and the ship does a MoveAction to that point.
-	 * Don't forget space is toroidal!
+	 * Human mouse interface. To move, click somewhere on the screen and the ship
+	 * does a MoveAction to that point. Don't forget space is toroidal!
 	 * 
 	 * @author amy
 	 *
@@ -277,16 +275,16 @@ public class HumanTeamClient extends TeamClient {
 		@Override
 		public void mouseReleased(MouseEvent e) {
 			Point point = e.getPoint();
-			
+
 			Point2D newPoint = new Point2D.Double(0, 0);
-			mouseTransform.transform(point, newPoint); 
-			
+			mouseTransform.transform(point, newPoint);
+
 			// only listen to the right button
 			if (e.getButton() == MouseEvent.BUTTON3 || e.isAltDown()) {
-				//System.out.println("User right clicked at " + point.x + ", " + point.y);
+				// System.out.println("User right clicked at " + point.x + ", " + point.y);
 				lastMouseClick = new Position(newPoint.getX(), newPoint.getY());
 			}
 		}
 	}
-	
+
 }

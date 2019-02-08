@@ -1,7 +1,7 @@
 package spacesettlers.configs;
 
 /**
- * The simulator configuration file read in from xstream 
+ * The simulator configuration file read in from xstream
  * 
  * @author amy
  */
@@ -15,78 +15,75 @@ public class SpaceSettlersConfig {
 	 * Size of a simulation time step for the physics engine
 	 */
 	double simulationTimeStep;
-	
+
 	/**
 	 * Number of simulated steps taken within the simulator
 	 */
 	int simulationSteps;
-	
+
 	/**
 	 * Initial random seed.
 	 */
 	long randomSeed;
-	
+
 	/**
 	 * Number of beacons in the spacewar environment
 	 */
 	int numBeacons;
-	
+
 	/**
 	 * Maximum number of ships in a team (can be 1)
 	 */
 	int maximumShipsPerTeam;
-	
+
 	/**
 	 * Maximum number of initial ships in a team (can be 1)
 	 */
 	int maximumInitialShipsPerTeam;
 
-
 	/**
 	 * The team configuration for each team
 	 */
 	HighLevelTeamConfig[] teams;
-	
+
 	/**
 	 * The base configuration for each base
 	 */
 	BaseConfig[] bases;
-	
+
 	/**
 	 * Configuration for the random asteroids
 	 */
 	RandomAsteroidConfig randomAsteroids;
-	
+
 	/**
 	 * Configuration for the fixed asteroids (if any)
 	 */
 	FixedAsteroidConfig[] fixedAsteroids;
-	
+
 	/**
 	 * Used for capture the flag (can be not specified in other environments)
 	 */
 	FlagConfig[] flags;
-	
-	
+
 	/**
 	 * Scoring method for this game
 	 */
 	String scoringMethod;
-	
+
 	/**
-	 * @return the height of the simulation environment.  This is measured in pixels.
+	 * @return the height of the simulation environment. This is measured in pixels.
 	 */
 	public int getHeight() {
 		return height;
 	}
 
 	/**
-	 * @return the width of the simulation environment.  This is measured in pixels.
+	 * @return the width of the simulation environment. This is measured in pixels.
 	 */
 	public int getWidth() {
 		return width;
 	}
-
 
 	/**
 	 * @return the simulationTimeStep
@@ -150,15 +147,16 @@ public class SpaceSettlersConfig {
 
 	/**
 	 * Return the fixed location asteroids (if any)
+	 * 
 	 * @return
 	 */
 	public FixedAsteroidConfig[] getFixedAsteroids() {
 		return fixedAsteroids;
 	}
-	
-	
+
 	/**
 	 * Return the flag configs
+	 * 
 	 * @return
 	 */
 

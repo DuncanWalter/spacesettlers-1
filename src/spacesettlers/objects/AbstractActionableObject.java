@@ -8,16 +8,17 @@ import spacesettlers.objects.powerups.SpaceSettlersPowerupEnum;
 import spacesettlers.utilities.Position;
 
 /**
- * This class is the super class for all Space Settlers objects that can take actions (right now
- * that is ships and bases).  It contains the power ups for these objects.
+ * This class is the super class for all Space Settlers objects that can take
+ * actions (right now that is ships and bases). It contains the power ups for
+ * these objects.
  * 
  * @author amy
  *
  */
 abstract public class AbstractActionableObject extends AbstractObject {
 	/**
-	 * Maximum number of bullets (or other weapons) simultaneously in the simulator.  
-	 * This keeps ships from simply firing at every step 
+	 * Maximum number of bullets (or other weapons) simultaneously in the simulator.
+	 * This keeps ships from simply firing at every step
 	 */
 	public static final int INITIAL_WEAPON_CAPACITY = 5;
 
@@ -25,40 +26,42 @@ abstract public class AbstractActionableObject extends AbstractObject {
 	 * Does the item have a shield and is it using it?
 	 */
 	boolean isShielded;
-	
+
 	/**
 	 * The set of current power ups for this agent
 	 */
 	Set<SpaceSettlersPowerupEnum> currentPowerups;
-	
-    /**
-     * Actionable objects all have energy (which power ups and moving depletes)
-     */
-    int energy, maxEnergy;
-    
-    /**
-     * Actionable objects have a weapon capacity (which can be changed using power ups)
-     */
-    int weaponCapacity;
-    
-    /**
-     * Number of steps left that this ship is frozen (not frozen if less than or equal to 0)
-     */
-    int freezeCount;
-    
+
+	/**
+	 * Actionable objects all have energy (which power ups and moving depletes)
+	 */
+	int energy, maxEnergy;
+
+	/**
+	 * Actionable objects have a weapon capacity (which can be changed using power
+	 * ups)
+	 */
+	int weaponCapacity;
+
+	/**
+	 * Number of steps left that this ship is frozen (not frozen if less than or
+	 * equal to 0)
+	 */
+	int freezeCount;
+
 	/**
 	 * The name of the team this ship belongs to
 	 */
 	String teamName;
-	
+
 	/**
 	 * Hits and killsInflicted and damageInflicted for this object
 	 */
 	int hitsInflicted, killsInflicted, damageInflicted, damageReceived, killsReceived;
 
-
 	/**
 	 * Call the super constructor on objects
+	 * 
 	 * @param mass
 	 * @param radius
 	 * @param position
@@ -72,6 +75,7 @@ abstract public class AbstractActionableObject extends AbstractObject {
 
 	/**
 	 * Call the super constructor on objects
+	 * 
 	 * @param mass
 	 * @param radius
 	 */
@@ -79,9 +83,10 @@ abstract public class AbstractActionableObject extends AbstractObject {
 		super(mass, radius);
 		currentPowerups = new LinkedHashSet<SpaceSettlersPowerupEnum>();
 	}
-	
+
 	/**
 	 * Get the current weapon capacity
+	 * 
 	 * @return
 	 */
 	public int getWeaponCapacity() {
@@ -90,6 +95,7 @@ abstract public class AbstractActionableObject extends AbstractObject {
 
 	/**
 	 * Set the new one (called inside power ups)
+	 * 
 	 * @param weaponCapacity
 	 */
 	public void setWeaponCapacity(int weaponCapacity) {
@@ -109,34 +115,35 @@ abstract public class AbstractActionableObject extends AbstractObject {
 			return false;
 		}
 	}
-	
-	
 
 	/**
 	 * Add the power up to the current list of things this item can use
+	 * 
 	 * @param powerup
 	 */
 	public void addPowerup(SpaceSettlersPowerupEnum powerup) {
 		currentPowerups.add(powerup);
 	}
-	
+
 	/**
 	 * When an item dies, its power ups disappear
 	 */
 	public void resetPowerups() {
 		currentPowerups.clear();
 	}
-	
+
 	/**
 	 * Remove the current power up from the set of allowed ones
+	 * 
 	 * @param powerup
 	 */
 	public void removePowerup(SpaceSettlersPowerupEnum powerup) {
 		currentPowerups.remove(powerup);
 	}
-	
+
 	/**
 	 * Is the object currently shielded
+	 * 
 	 * @return
 	 */
 	public boolean isShielded() {
@@ -145,6 +152,7 @@ abstract public class AbstractActionableObject extends AbstractObject {
 
 	/**
 	 * Set the shielding
+	 * 
 	 * @param isShielded
 	 */
 	public void setShielded(boolean isShielded) {
@@ -153,22 +161,25 @@ abstract public class AbstractActionableObject extends AbstractObject {
 
 	/**
 	 * Return the amount of energy
+	 * 
 	 * @return
 	 */
 	public double getEnergy() {
 		return energy;
 	}
-	
+
 	/**
 	 * Return the maximum energy this base can hold
+	 * 
 	 * @return
 	 */
 	public int getMaxEnergy() {
 		return maxEnergy;
 	}
-	
+
 	/**
 	 * Set the max energy (used by power ups)
+	 * 
 	 * @param maxEnergy
 	 */
 	public void setMaxEnergy(int maxEnergy) {
@@ -176,15 +187,15 @@ abstract public class AbstractActionableObject extends AbstractObject {
 	}
 
 	/**
-	 * Update the energy of the ship.  If it falls below 0, mark the ship as dead
+	 * Update the energy of the ship. If it falls below 0, mark the ship as dead
 	 * 
 	 * @param difference
 	 */
 	abstract public void updateEnergy(int difference);
 
 	/**
-	 * Get the number of steps it is frozen.  Not frozen
-	 * if less than or equal to 0.
+	 * Get the number of steps it is frozen. Not frozen if less than or equal to 0.
+	 * 
 	 * @return
 	 */
 	public int getFreezeCount() {
@@ -192,7 +203,8 @@ abstract public class AbstractActionableObject extends AbstractObject {
 	}
 
 	/**
-	 * Set the freeze count 
+	 * Set the freeze count
+	 * 
 	 * @param freezeCount
 	 */
 	public void setFreezeCount(int freezeCount) {
@@ -201,10 +213,10 @@ abstract public class AbstractActionableObject extends AbstractObject {
 			super.isControllable = false;
 		}
 	}
-	
+
 	/**
-	 * Decrement the freeze count (if needed)
-	 * and set the ship back to controllable when it gets to 0
+	 * Decrement the freeze count (if needed) and set the ship back to controllable
+	 * when it gets to 0
 	 */
 	public void decrementFreezeCount() {
 		freezeCount--;
@@ -220,7 +232,6 @@ abstract public class AbstractActionableObject extends AbstractObject {
 		this.teamName = teamName;
 	}
 
-
 	/**
 	 * @return the teamName
 	 */
@@ -230,12 +241,13 @@ abstract public class AbstractActionableObject extends AbstractObject {
 
 	/**
 	 * Get the hitsInflicted this object has made
+	 * 
 	 * @return the hitsInflicted this object has made
 	 */
 	public int getHitsInflicted() {
 		return hitsInflicted;
 	}
-	
+
 	/**
 	 * increment the hitsInflicted for this ship
 	 */
@@ -245,6 +257,7 @@ abstract public class AbstractActionableObject extends AbstractObject {
 
 	/**
 	 * Get the killsInflicted this object has made
+	 * 
 	 * @return the killsInflicted this object has made
 	 */
 	public int getKillsInflicted() {
@@ -253,6 +266,7 @@ abstract public class AbstractActionableObject extends AbstractObject {
 
 	/**
 	 * Get the killsReceived this object has made
+	 * 
 	 * @return the killsReceived this object has made
 	 */
 	public int getKillsReceived() {
@@ -265,7 +279,7 @@ abstract public class AbstractActionableObject extends AbstractObject {
 	public void incrementKillsInflicted() {
 		this.killsInflicted++;
 	}
-	
+
 	/**
 	 * increment the kill received for this object
 	 */
@@ -275,6 +289,7 @@ abstract public class AbstractActionableObject extends AbstractObject {
 
 	/**
 	 * Get the damageInflicted this object has made
+	 * 
 	 * @return the damageInflicted this object has made
 	 */
 	public int getDamageInflicted() {
@@ -287,9 +302,10 @@ abstract public class AbstractActionableObject extends AbstractObject {
 	public void incrementDamageReceived(int increment) {
 		this.damageReceived += increment;
 	}
-	
+
 	/**
 	 * Get the damageReceived this object has made
+	 * 
 	 * @return the damageReceived this object has gotten
 	 */
 	public int getDamageReceived() {
@@ -302,7 +318,6 @@ abstract public class AbstractActionableObject extends AbstractObject {
 	public void incrementDamageInflicted(int increment) {
 		this.damageInflicted += increment;
 	}
-	
 
 	/**
 	 * Get the current set of powerups for the object
@@ -312,7 +327,5 @@ abstract public class AbstractActionableObject extends AbstractObject {
 	public Set<SpaceSettlersPowerupEnum> getCurrentPowerups() {
 		return currentPowerups;
 	}
-	
-	
-	
+
 }

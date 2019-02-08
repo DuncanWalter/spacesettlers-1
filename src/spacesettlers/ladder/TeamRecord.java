@@ -9,32 +9,32 @@ import spacesettlers.clients.Team;
  */
 public class TeamRecord {
 	int numGames;
-	
+
 	double totalScore;
-	
+
 	double averageScore;
-	
+
 	int totalBeacons;
-	
+
 	double averageBeacons;
-	
+
 	int totalResources;
-	
+
 	double averageResources;
-	
+
 	String teamName;
-	
+
 	public TeamRecord(String teamName) {
 		this.teamName = teamName;
 		reset();
-		
+
 	}
-	
+
 	public TeamRecord(Team team) {
 		this.teamName = team.getLadderName();
 		reset();
 	}
-	
+
 	/**
 	 * Resets the record
 	 */
@@ -52,8 +52,7 @@ public class TeamRecord {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((teamName == null) ? 0 : teamName.hashCode());
+		result = prime * result + ((teamName == null) ? 0 : teamName.hashCode());
 		return result;
 	}
 
@@ -76,17 +75,18 @@ public class TeamRecord {
 
 	/**
 	 * Update the team record
+	 * 
 	 * @param team
 	 */
 	public void update(Team team) {
 		numGames++;
-		
+
 		totalScore += team.getScore();
 		averageScore = totalScore / numGames;
-		
+
 		totalResources += team.getSummedTotalResources();
 		averageResources = totalResources / numGames;
-		
+
 		totalBeacons += team.getTotalBeaconsCollected();
 		averageBeacons = totalBeacons / numGames;
 	}
@@ -96,7 +96,9 @@ public class TeamRecord {
 	}
 
 	/**
-	 * Fixes bug where students can put in JavaScript in their team name to rearrange the ladder.  fix provided by Christopher Fenner, January 2013
+	 * Fixes bug where students can put in JavaScript in their team name to
+	 * rearrange the ladder. fix provided by Christopher Fenner, January 2013
+	 * 
 	 * @return
 	 */
 	public String getTeamName() {
@@ -110,8 +112,5 @@ public class TeamRecord {
 	public double getAverageResources() {
 		return averageResources;
 	}
-
-	
-	
 
 }

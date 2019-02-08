@@ -15,8 +15,11 @@ import spacesettlers.objects.AbstractObject;
 import spacesettlers.objects.powerups.SpaceSettlersPowerupEnum;
 import spacesettlers.objects.resources.ResourcePile;
 import spacesettlers.simulator.Toroidal2DPhysics;
+
 /**
- * Client that literally never moves (not a horrible strategy if you just want to never die)
+ * Client that literally never moves (not a horrible strategy if you just want
+ * to never die)
+ * 
  * @author amy
  *
  */
@@ -38,7 +41,7 @@ public class DoNothingTeamClient extends TeamClient {
 			Set<AbstractActionableObject> actionableObjects) {
 		HashMap<UUID, AbstractAction> actions = new HashMap<UUID, AbstractAction>();
 		for (AbstractObject actionable : actionableObjects) {
-				actions.put(actionable.getId(), new DoNothingAction());
+			actions.put(actionable.getId(), new DoNothingAction());
 		}
 		return actions;
 	}
@@ -46,7 +49,7 @@ public class DoNothingTeamClient extends TeamClient {
 	@Override
 	public void getMovementEnd(Toroidal2DPhysics space, Set<AbstractActionableObject> actionableObjects) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -55,17 +58,15 @@ public class DoNothingTeamClient extends TeamClient {
 		return null;
 	}
 
-
 	@Override
 	/**
 	 * Do nothing never purchases
 	 */
 	public Map<UUID, PurchaseTypes> getTeamPurchases(Toroidal2DPhysics space,
-			Set<AbstractActionableObject> actionableObjects, 
-			ResourcePile resourcesAvailable, 
+			Set<AbstractActionableObject> actionableObjects, ResourcePile resourcesAvailable,
 			PurchaseCosts purchaseCosts) {
 		// TODO Auto-generated method stub
-		return new HashMap<UUID,PurchaseTypes>();
+		return new HashMap<UUID, PurchaseTypes>();
 	}
 
 	@Override

@@ -36,24 +36,25 @@ import spacesettlers.simulator.Toroidal2DPhysics;
 import spacesettlers.utilities.Position;
 
 /**
- * An aggressive flag collector client that handles multiple agents in the team.  The heuristic works as follows:
+ * An aggressive flag collector client that handles multiple agents in the team.
+ * The heuristic works as follows:
  * 
- *   The nearest and healthy ship is assigned to go get the flag and bring it back.
- *   The other ships are assigned to resource collection.
- *   Resources are used to buy additional ships and bases (with the idea that bases are better to have near the 
- *   enemy flag locations).
- *   One ship is dispatched to harass the other team similar to AggressiveHeuritsicAsteroidCollector  
- *  
+ * The nearest and healthy ship is assigned to go get the flag and bring it
+ * back. The other ships are assigned to resource collection. Resources are used
+ * to buy additional ships and bases (with the idea that bases are better to
+ * have near the enemy flag locations). One ship is dispatched to harass the
+ * other team similar to AggressiveHeuritsicAsteroidCollector
+ * 
  * @author amy
  */
 public class AggressiveFlagCollectorTeamClient extends TeamClient {
-	HashMap <UUID, Ship> asteroidToShipMap;
-	HashMap <UUID, Boolean> aimingForBase;
-	HashMap <UUID, Boolean> huntingShip;
-	HashMap <UUID, Boolean> justHitBase;
-	HashMap <UUID, Boolean> goingForCore;
+	HashMap<UUID, Ship> asteroidToShipMap;
+	HashMap<UUID, Boolean> aimingForBase;
+	HashMap<UUID, Boolean> huntingShip;
+	HashMap<UUID, Boolean> justHitBase;
+	HashMap<UUID, Boolean> goingForCore;
 	double shootProb = 0.2;
-	
+
 	/**
 	 * Assigns ships to asteroids and beacons, as described above
 	 */
@@ -65,22 +66,23 @@ public class AggressiveFlagCollectorTeamClient extends TeamClient {
 
 		// get the flag carrier, if we have one
 		flagShip = getFlagCarrier(space, actionableObjects);
-		
+
 		// we don't have a ship carrying a flag, so find the best choice (if it exists)
 		if (flagShip == null) {
 			flagShip = findHealthiestShipNearFlag(space, actionableObjects);
 		}
-		
+
 		// count ships so we know if we can have a weapons ship
-		for (AbstractObject actionable :  actionableObjects) {
+		for (AbstractObject actionable : actionableObjects) {
 			if (actionable instanceof Ship) {
 				numShips++;
 			}
 		}
 
-		// loop through each ship and assign it to either get energy (if needed for health) or
+		// loop through each ship and assign it to either get energy (if needed for
+		// health) or
 		// resources (as long as it isn't the flagShip)
-		for (AbstractObject actionable :  actionableObjects) {
+		for (AbstractObject actionable : actionableObjects) {
 			if (actionable instanceof Ship) {
 				Ship ship = (Ship) actionable;
 
@@ -88,16 +90,16 @@ public class AggressiveFlagCollectorTeamClient extends TeamClient {
 
 				if (flagShip != null && ship.equals(flagShip)) {
 					if (flagShip.isCarryingFlag()) {
-						//System.out.println("We have a flag carrier!");
+						// System.out.println("We have a flag carrier!");
 						Base base = findNearestBase(space, ship);
-						//System.out.println("Flag ship before computing action: " + flagShip);
+						// System.out.println("Flag ship before computing action: " + flagShip);
 						action = new MoveToObjectAction(space, ship.getPosition(), base);
-						//System.out.println("Aiming for base with action " + action);
+						// System.out.println("Aiming for base with action " + action);
 						aimingForBase.put(ship.getId(), true);
-						//System.out.println("Flag ship after computing action: " + flagShip);
+						// System.out.println("Flag ship after computing action: " + flagShip);
 					} else {
 						Flag enemyFlag = getEnemyFlag(space);
-						action = new MoveToObjectAction(space, ship.getPosition(), enemyFlag, 
+						action = new MoveToObjectAction(space, ship.getPosition(), enemyFlag,
 								enemyFlag.getPosition().getTranslationalVelocity());
 					}
 				} else {
@@ -115,47 +117,49 @@ public class AggressiveFlagCollectorTeamClient extends TeamClient {
 							if (huntingShip.containsKey(ship.getId())) {
 								// make one ship the hunter
 								action = getWeaponShipAction(space, ship);
-								//System.out.println("Getting action for hunter");
+								// System.out.println("Getting action for hunter");
 							} else {
 								// extra ship but not the hunter (likely a 4th ship)
 								action = getAsteroidCollectorAction(space, ship);
 							}
 						}
 					} else {
-						// with 2 ships, we need to always collect resources so we can buy more ships for hunting
+						// with 2 ships, we need to always collect resources so we can buy more ships
+						// for hunting
 						// and resources later
 					}
 				}
 
 				// save the action for this ship
 				actions.put(ship.getId(), action);
-			} else if(actionable instanceof Drone) {
+			} else if (actionable instanceof Drone) {
 				Drone drone = (Drone) actionable;
 				AbstractAction action;
 
-				action = drone.getDroneAction(space); //Or make up some action of your own! This just adds the default action back to the drone.
+				action = drone.getDroneAction(space); // Or make up some action of your own! This just adds the default
+														// action back to the drone.
 				actions.put(drone.getId(), action);
 			} else {
 				// bases do nothing
 				actions.put(actionable.getId(), new DoNothingAction());
 			}
-		} 
+		}
 		return actions;
 	}
 
 	/**
-	 * Get the flag carrier (if there is one).  Return null if there isn't a current flag carrier
+	 * Get the flag carrier (if there is one). Return null if there isn't a current
+	 * flag carrier
 	 * 
 	 * @param space
 	 * @param actionableObjects
 	 * @return
 	 */
-	private Ship getFlagCarrier(Toroidal2DPhysics space,
-			Set<AbstractActionableObject> actionableObjects) {
-		for (AbstractObject actionable :  actionableObjects) {
+	private Ship getFlagCarrier(Toroidal2DPhysics space, Set<AbstractActionableObject> actionableObjects) {
+		for (AbstractObject actionable : actionableObjects) {
 			if (actionable instanceof Ship) {
 				Ship ship = (Ship) actionable;
-				
+
 				if (ship.isCarryingFlag()) {
 					return ship;
 				}
@@ -163,9 +167,10 @@ public class AggressiveFlagCollectorTeamClient extends TeamClient {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Finds and returns the enemy flag
+	 * 
 	 * @param space
 	 * @return
 	 */
@@ -180,15 +185,15 @@ public class AggressiveFlagCollectorTeamClient extends TeamClient {
 		}
 		return enemyFlag;
 	}
-	
+
 	/**
 	 * Gets the action for the weapons based ship
+	 * 
 	 * @param space
 	 * @param ship
 	 * @return
 	 */
-	private AbstractAction getWeaponShipAction(Toroidal2DPhysics space,
-			Ship ship) {
+	private AbstractAction getWeaponShipAction(Toroidal2DPhysics space, Ship ship) {
 		AbstractAction current = ship.getCurrentAction();
 		Position currentPosition = ship.getPosition();
 
@@ -215,7 +220,8 @@ public class AggressiveFlagCollectorTeamClient extends TeamClient {
 		}
 
 		// did we bounce off the base?
-		if (ship.getResources().getTotal() == 0 && ship.getEnergy() > 2000 && aimingForBase.containsKey(ship.getId()) && aimingForBase.get(ship.getId())) {
+		if (ship.getResources().getTotal() == 0 && ship.getEnergy() > 2000 && aimingForBase.containsKey(ship.getId())
+				&& aimingForBase.get(ship.getId())) {
 			current = null;
 			aimingForBase.put(ship.getId(), false);
 		}
@@ -237,7 +243,7 @@ public class AggressiveFlagCollectorTeamClient extends TeamClient {
 					newAction = new MoveToObjectAction(space, currentPosition, beacon);
 				}
 			} else {
-				newAction = new MoveToObjectAction(space, currentPosition, enemy, 
+				newAction = new MoveToObjectAction(space, currentPosition, enemy,
 						enemy.getPosition().getTranslationalVelocity());
 			}
 			return newAction;
@@ -246,9 +252,9 @@ public class AggressiveFlagCollectorTeamClient extends TeamClient {
 		}
 	}
 
-
 	/**
 	 * Find the nearest ship on another team and aim for it
+	 * 
 	 * @param space
 	 * @param ship
 	 * @return
@@ -261,18 +267,17 @@ public class AggressiveFlagCollectorTeamClient extends TeamClient {
 			if (otherShip.getTeamName().equals(ship.getTeamName())) {
 				continue;
 			}
-			
+
 			double distance = space.findShortestDistance(ship.getPosition(), otherShip.getPosition());
 			if (distance < minDistance) {
 				minDistance = distance;
 				nearestShip = otherShip;
 			}
 		}
-		
+
 		return nearestShip;
 	}
 
-	
 	/**
 	 * Finds the ship with the highest health and nearest the flag
 	 * 
@@ -280,8 +285,7 @@ public class AggressiveFlagCollectorTeamClient extends TeamClient {
 	 * @param actionableObjects
 	 * @return
 	 */
-	private Ship findHealthiestShipNearFlag(Toroidal2DPhysics space,
-			Set<AbstractActionableObject> actionableObjects) {
+	private Ship findHealthiestShipNearFlag(Toroidal2DPhysics space, Set<AbstractActionableObject> actionableObjects) {
 		double minDistance = Double.MAX_VALUE;
 		double maxHealth = Double.MIN_VALUE;
 		int minHealth = 2000;
@@ -290,12 +294,12 @@ public class AggressiveFlagCollectorTeamClient extends TeamClient {
 		// first find the enemy flag
 		Flag enemyFlag = getEnemyFlag(space);
 
-		// now find the healthiest ship that has at least the required minimum energy 
+		// now find the healthiest ship that has at least the required minimum energy
 		// if no ships meet that criteria, return null
-		for (AbstractObject actionable :  actionableObjects) {
+		for (AbstractObject actionable : actionableObjects) {
 			if (actionable instanceof Ship) {
 				Ship ship = (Ship) actionable;
-				
+
 				double dist = space.findShortestDistance(ship.getPosition(), enemyFlag.getPosition());
 				if (dist < minDistance && ship.getEnergy() > minHealth) {
 					if (ship.getEnergy() > maxHealth) {
@@ -306,31 +310,30 @@ public class AggressiveFlagCollectorTeamClient extends TeamClient {
 				}
 			}
 		}
-		
+
 		return bestShip;
-		
+
 	}
-	
-	
+
 	/**
 	 * Gets the action for the asteroid collecting ship
+	 * 
 	 * @param space
 	 * @param ship
 	 * @return
 	 */
-	private AbstractAction getAsteroidCollectorAction(Toroidal2DPhysics space,
-			Ship ship) {
+	private AbstractAction getAsteroidCollectorAction(Toroidal2DPhysics space, Ship ship) {
 		AbstractAction current = ship.getCurrentAction();
 		Position currentPosition = ship.getPosition();
 
 		// if the ship has enough resourcesAvailable, take it back to base
-		if (ship.getResources().getTotal() > 500  || ship.getNumCores() > 0) {
+		if (ship.getResources().getTotal() > 500 || ship.getNumCores() > 0) {
 			Base base = findNearestBase(space, ship);
 			AbstractAction newAction = new MoveToObjectAction(space, currentPosition, base);
 			aimingForBase.put(ship.getId(), true);
 			return newAction;
 		}
-		
+
 		// aim for a beacon if there isn't enough energy
 		if (ship.getEnergy() < 1000) {
 			Beacon beacon = pickNearestBeacon(space, ship);
@@ -354,12 +357,11 @@ public class AggressiveFlagCollectorTeamClient extends TeamClient {
 			return newAction;
 		}
 
-
 		// did we bounce off the base?
-		if (current == null || current.isMovementFinished(space) ||
-				(justHitBase.containsKey(ship.getId()) && justHitBase.get(ship.getId()))) {
+		if (current == null || current.isMovementFinished(space)
+				|| (justHitBase.containsKey(ship.getId()) && justHitBase.get(ship.getId()))) {
 			aimingForBase.put(ship.getId(), false);
-			justHitBase.put(ship.getId(), false);			
+			justHitBase.put(ship.getId(), false);
 			goingForCore.put(ship.getId(), false);
 			current = null;
 		}
@@ -367,7 +369,7 @@ public class AggressiveFlagCollectorTeamClient extends TeamClient {
 		// otherwise aim for the asteroid
 		if (current == null || current.isMovementFinished(space)) {
 			aimingForBase.put(ship.getId(), false);
-			justHitBase.put(ship.getId(), false);			
+			justHitBase.put(ship.getId(), false);
 			goingForCore.put(ship.getId(), false);
 			Asteroid asteroid = pickHighestValueNearestFreeAsteroid(space, ship);
 
@@ -375,18 +377,20 @@ public class AggressiveFlagCollectorTeamClient extends TeamClient {
 
 			if (asteroid != null) {
 				asteroidToShipMap.put(asteroid.getId(), ship);
-				newAction = new MoveToObjectAction(space, currentPosition, asteroid, 
+				newAction = new MoveToObjectAction(space, currentPosition, asteroid,
 						asteroid.getPosition().getTranslationalVelocity());
 			}
-			
+
 			return newAction;
-		} 
-		
+		}
+
 		return ship.getCurrentAction();
 	}
 
 	/**
-	 * Find the nearest core to this ship that falls within the specified minimum distance
+	 * Find the nearest core to this ship that falls within the specified minimum
+	 * distance
+	 * 
 	 * @param space
 	 * @param ship
 	 * @return
@@ -406,7 +410,7 @@ public class AggressiveFlagCollectorTeamClient extends TeamClient {
 		}
 
 		return closestCore;
-	}	
+	}
 
 	/**
 	 * Find the base for this team nearest to this ship
@@ -432,7 +436,8 @@ public class AggressiveFlagCollectorTeamClient extends TeamClient {
 	}
 
 	/**
-	 * Returns the asteroid of highest value that isn't already being chased by this team
+	 * Returns the asteroid of highest value that isn't already being chased by this
+	 * team
 	 * 
 	 * @return
 	 */
@@ -454,12 +459,13 @@ public class AggressiveFlagCollectorTeamClient extends TeamClient {
 				}
 			}
 		}
-		//System.out.println("Best asteroid has " + bestMoney);
+		// System.out.println("Best asteroid has " + bestMoney);
 		return bestAsteroid;
 	}
 
 	/**
 	 * Find the nearest beacon to this ship
+	 * 
 	 * @param space
 	 * @param ship
 	 * @return
@@ -482,8 +488,6 @@ public class AggressiveFlagCollectorTeamClient extends TeamClient {
 		return closestBeacon;
 	}
 
-
-
 	@Override
 	public void getMovementEnd(Toroidal2DPhysics space, Set<AbstractActionableObject> actionableObjects) {
 		ArrayList<Asteroid> finishedAsteroids = new ArrayList<Asteroid>();
@@ -491,8 +495,8 @@ public class AggressiveFlagCollectorTeamClient extends TeamClient {
 		for (UUID asteroidId : asteroidToShipMap.keySet()) {
 			Asteroid asteroid = (Asteroid) space.getObjectById(asteroidId);
 			if (asteroid == null || !asteroid.isAlive() || asteroid.isMoveable()) {
- 				finishedAsteroids.add(asteroid);
-				//System.out.println("Removing asteroid from map");
+				finishedAsteroids.add(asteroid);
+				// System.out.println("Removing asteroid from map");
 			}
 		}
 
@@ -506,7 +510,7 @@ public class AggressiveFlagCollectorTeamClient extends TeamClient {
 				Ship ship = (Ship) space.getObjectById(shipId);
 				if (ship.getResources().getTotal() == 0 && ship.getNumFlags() == 0 && ship.getNumCores() == 0) {
 					// we hit the base (or died, either way, we are not aiming for base now)
-					//System.out.println("Hit the base and dropped off resources");
+					// System.out.println("Hit the base and dropped off resources");
 					aimingForBase.put(shipId, false);
 					justHitBase.put(shipId, true);
 					goingForCore.put(ship.getId(), false);
@@ -525,13 +529,12 @@ public class AggressiveFlagCollectorTeamClient extends TeamClient {
 		huntingShip = new HashMap<UUID, Boolean>();
 		justHitBase = new HashMap<UUID, Boolean>();
 		goingForCore = new HashMap<UUID, Boolean>();
-		
+
 	}
 
 	/**
-	 * Demonstrates saving out to the xstream file
-	 * You can save out other ways too.  This is a human-readable way to examine
-	 * the knowledge you have learned.
+	 * Demonstrates saving out to the xstream file You can save out other ways too.
+	 * This is a human-readable way to examine the knowledge you have learned.
 	 */
 	@Override
 	public void shutDown(Toroidal2DPhysics space) {
@@ -544,12 +547,11 @@ public class AggressiveFlagCollectorTeamClient extends TeamClient {
 
 	@Override
 	/**
-	 * If there is enough resourcesAvailable, buy a base.  Place it by finding a ship that is sufficiently
-	 * far away from the existing bases
+	 * If there is enough resourcesAvailable, buy a base. Place it by finding a ship
+	 * that is sufficiently far away from the existing bases
 	 */
 	public Map<UUID, PurchaseTypes> getTeamPurchases(Toroidal2DPhysics space,
-			Set<AbstractActionableObject> actionableObjects, 
-			ResourcePile resourcesAvailable, 
+			Set<AbstractActionableObject> actionableObjects, ResourcePile resourcesAvailable,
 			PurchaseCosts purchaseCosts) {
 
 		HashMap<UUID, PurchaseTypes> purchases = new HashMap<UUID, PurchaseTypes>();
@@ -564,8 +566,9 @@ public class AggressiveFlagCollectorTeamClient extends TeamClient {
 				numShips++;
 			}
 		}
-		
-		// now see if we can afford a base or a ship.  We want a base but we also really want a 3rd ship
+
+		// now see if we can afford a base or a ship. We want a base but we also really
+		// want a 3rd ship
 		// try to balance
 		if (purchaseCosts.canAfford(PurchaseTypes.BASE, resourcesAvailable)) {
 			for (AbstractActionableObject actionableObject : actionableObjects) {
@@ -576,20 +579,26 @@ public class AggressiveFlagCollectorTeamClient extends TeamClient {
 					boolean boughtDrone = false;
 					boolean boughtCore = false;
 
-					if (!boughtDrone && ship.getNumCores() > 0 &&
-							purchaseCosts.canAfford(PurchaseTypes.DRONE, resourcesAvailable)) { // Or some other criteria for buying a drone, depending on what user wants
-						purchases.put(ship.getId(), PurchaseTypes.DRONE); //This spawns a drone within a certain radius of your ship
+					if (!boughtDrone && ship.getNumCores() > 0
+							&& purchaseCosts.canAfford(PurchaseTypes.DRONE, resourcesAvailable)) { // Or some other
+																									// criteria for
+																									// buying a drone,
+																									// depending on what
+																									// user wants
+						purchases.put(ship.getId(), PurchaseTypes.DRONE); // This spawns a drone within a certain radius
+																			// of your ship
 						boughtDrone = true;
-						//System.out.println("Bought a drone!");
+						// System.out.println("Bought a drone!");
 					}
 
-					if (!boughtCore && ship.getNumCores() == 0 && 
-							purchaseCosts.canAfford(PurchaseTypes.CORE, resourcesAvailable)) { //Or some other criteria for buying a core
-						purchases.put(ship.getId(), PurchaseTypes.CORE); //This places a core in your ship’s inventory
-						//System.out.println("Bought a core!!");
+					if (!boughtCore && ship.getNumCores() == 0
+							&& purchaseCosts.canAfford(PurchaseTypes.CORE, resourcesAvailable)) { // Or some other
+																									// criteria for
+																									// buying a core
+						purchases.put(ship.getId(), PurchaseTypes.CORE); // This places a core in your ship’s inventory
+						// System.out.println("Bought a core!!");
 						boughtCore = true;
 					}
-					
 
 					// how far away is this ship to a base of my team?
 					boolean buyBase = true;
@@ -610,15 +619,15 @@ public class AggressiveFlagCollectorTeamClient extends TeamClient {
 						break;
 					}
 				}
-			}		
-		} 
-		
+			}
+		}
+
 		// can I buy a ship?
 		if (purchaseCosts.canAfford(PurchaseTypes.SHIP, resourcesAvailable) && bought_base == false) {
 			for (AbstractActionableObject actionableObject : actionableObjects) {
 				if (actionableObject instanceof Base) {
 					Base base = (Base) actionableObject;
-					
+
 					purchases.put(base.getId(), PurchaseTypes.SHIP);
 					System.out.println("Aggressive Flag Collector is buying a ship!");
 					break;
@@ -628,12 +637,12 @@ public class AggressiveFlagCollectorTeamClient extends TeamClient {
 
 		}
 
-
 		return purchases;
 	}
 
 	/**
 	 * The hunting ship needs to shoot if it is near its target
+	 * 
 	 * @param space
 	 * @param actionableObjects
 	 * @return
@@ -643,10 +652,10 @@ public class AggressiveFlagCollectorTeamClient extends TeamClient {
 			Set<AbstractActionableObject> actionableObjects) {
 		HashMap<UUID, SpaceSettlersPowerupEnum> powerUps = new HashMap<UUID, SpaceSettlersPowerupEnum>();
 
-		for (AbstractObject actionable :  actionableObjects) {
+		for (AbstractObject actionable : actionableObjects) {
 			if (actionable instanceof Ship) {
 				Ship ship = (Ship) actionable;
-				
+
 				// only shoot if we are the hunter
 				if (huntingShip.containsKey(ship.getId())) {
 					// do we have missiles left to shoot?
@@ -657,7 +666,7 @@ public class AggressiveFlagCollectorTeamClient extends TeamClient {
 						}
 					}
 				}
-				
+
 				// launch the drone with the flag
 				if (ship.isCarryingFlag()) {
 					if (ship.isValidPowerup(SpaceSettlersPowerupEnum.DRONE)) {
@@ -666,7 +675,7 @@ public class AggressiveFlagCollectorTeamClient extends TeamClient {
 				}
 			}
 		}
-		
+
 		return powerUps;
 	}
 

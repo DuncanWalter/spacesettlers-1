@@ -8,21 +8,22 @@ import spacesettlers.objects.weapons.Missile;
 import spacesettlers.utilities.Position;
 
 /**
- * Draw a missile 
+ * Draw a missile
+ * 
  * @author amy
  *
  */
 public class MissileGraphics extends SpacewarGraphics {
 	Missile missile;
-	//Color missile_color = new Color(200, 200, 200);
+	// Color missile_color = new Color(200, 200, 200);
 	Color firingShipColor;
-	
-	public MissileGraphics(Missile missle) {
-        super((int)(missle.getRadius() * 2), (int)(missle.getRadius()  * 2));
 
-        firingShipColor = missle.getFiringShip().getTeamColor();
-        
-        this.missile = missle;
+	public MissileGraphics(Missile missle) {
+		super((int) (missle.getRadius() * 2), (int) (missle.getRadius() * 2));
+
+		firingShipColor = missle.getFiringShip().getTeamColor();
+
+		this.missile = missle;
 	}
 
 	/**
@@ -34,12 +35,12 @@ public class MissileGraphics extends SpacewarGraphics {
 
 	@Override
 	public void draw(Graphics2D graphics) {
-        float radius = missile.getRadius();
-        float diameter = radius * 2;
+		float radius = missile.getRadius();
+		float diameter = radius * 2;
 
-        graphics.setColor(firingShipColor);
-        graphics.fill(new Ellipse2D.Float((float)drawLocation.getX() - radius,
-                (float)drawLocation.getY() - radius, diameter, diameter));
+		graphics.setColor(firingShipColor);
+		graphics.fill(new Ellipse2D.Float((float) drawLocation.getX() - radius, (float) drawLocation.getY() - radius,
+				diameter, diameter));
 
 	}
 

@@ -9,43 +9,42 @@ import spacesettlers.objects.Beacon;
 import spacesettlers.utilities.Position;
 
 /**
- * The graphic for a beacon draws a beacon
- * on the screen.  The actual drawing code comes
- * from the spacewar1 simulator.
+ * The graphic for a beacon draws a beacon on the screen. The actual drawing
+ * code comes from the spacewar1 simulator.
  * 
  * @author amy
  *
  */
 public class BeaconGraphics extends SpacewarGraphics {
-    public static final Color BEACON_COLOR = Color.YELLOW;
-    public static final Color BEACON_LINE_COLOR = new Color(255,215,0);
+	public static final Color BEACON_COLOR = Color.YELLOW;
+	public static final Color BEACON_LINE_COLOR = new Color(255, 215, 0);
 
-    private final Beacon beacon;
+	private final Beacon beacon;
 
-    public BeaconGraphics(Beacon b) {
-    	super(Beacon.BEACON_RADIUS, Beacon.BEACON_RADIUS);
-        this.beacon = b;
-    }
+	public BeaconGraphics(Beacon b) {
+		super(Beacon.BEACON_RADIUS, Beacon.BEACON_RADIUS);
+		this.beacon = b;
+	}
 
-    public void draw(Graphics2D g) {
-        float radius = Beacon.BEACON_RADIUS;
-        float diameter = Beacon.BEACON_RADIUS * 2;
-        
-        Ellipse2D.Double shape = new Ellipse2D.Double(drawLocation.getX() - radius,
-        		drawLocation.getY() - radius, diameter, diameter);
+	public void draw(Graphics2D g) {
+		float radius = Beacon.BEACON_RADIUS;
+		float diameter = Beacon.BEACON_RADIUS * 2;
 
-        g.setColor(BEACON_COLOR);
-        g.fill(shape);
+		Ellipse2D.Double shape = new Ellipse2D.Double(drawLocation.getX() - radius, drawLocation.getY() - radius,
+				diameter, diameter);
 
-        g.setStroke(JSpaceSettlersComponent.THICK_STROKE);
-        g.setColor(BEACON_LINE_COLOR);
-        g.draw(shape);
+		g.setColor(BEACON_COLOR);
+		g.fill(shape);
 
-        // add an E to make it clear it is an energy beacon
+		g.setStroke(JSpaceSettlersComponent.THICK_STROKE);
+		g.setColor(BEACON_LINE_COLOR);
+		g.draw(shape);
+
+		// add an E to make it clear it is an energy beacon
 		g.setPaint(Color.BLACK);
-		g.drawString("E", (int) drawLocation.getX()-3, (int) drawLocation.getY() + 4);
+		g.drawString("E", (int) drawLocation.getX() - 3, (int) drawLocation.getY() + 4);
 
-    }
+	}
 
 	/**
 	 * Only draw if the beacon is alive
@@ -64,6 +63,4 @@ public class BeaconGraphics extends SpacewarGraphics {
 		return beacon.getPosition();
 	}
 
-	
-	
 }

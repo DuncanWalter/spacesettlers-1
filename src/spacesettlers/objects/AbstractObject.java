@@ -8,65 +8,66 @@ import spacesettlers.objects.resources.ResourcePile;
 import spacesettlers.utilities.Position;
 
 /**
- * Superclass for all objects in the spacesettlers simulator.  
+ * Superclass for all objects in the spacesettlers simulator.
  * 
  * @author amy
  */
 abstract public class AbstractObject {
 	/**
-	 * Position of the object in the simulator space 
+	 * Position of the object in the simulator space
 	 */
 	protected Position position;
-	
+
 	/**
 	 * The radius of the object
 	 */
 	protected int radius;
-	
+
 	/**
 	 * The mass of the object
 	 */
 	protected int mass, originalMass;
-	
+
 	/**
-	 * Is the object alive?  Some objects can never die but some can.
+	 * Is the object alive? Some objects can never die but some can.
 	 */
 	protected boolean isAlive;
-	
+
 	/**
 	 * Is the object currently drawable on the GUI?
 	 */
 	boolean isDrawable;
-	
+
 	/**
-	 * Is the object moveable?  Some objects can be flagged as not moveable and then
+	 * Is the object moveable? Some objects can be flagged as not moveable and then
 	 * they will not move even if things bounce into them.
 	 */
 	protected boolean isMoveable;
-	
+
 	/**
-	 * The resources available from this object (if it is mineable) or that this object is holding (ship and base).
-	 * Ignored for objects that don't use this (such as beacons).
+	 * The resources available from this object (if it is mineable) or that this
+	 * object is holding (ship and base). Ignored for objects that don't use this
+	 * (such as beacons).
 	 */
 	protected ResourcePile resources;
-	
+
 	/**
 	 * Number of flags this ship or base has collected
 	 */
 	protected int numFlags;
-	
+
 	/**
 	 * Number of cores this ship or base has collected
 	 */
 	protected int numCores;
-	
+
 	/**
 	 * The graphics for this object in the GUI
 	 */
 	protected SpacewarGraphics graphic;
-	
+
 	/**
-	 * Is the object controlled through actions?  Ships and teams are.
+	 * Is the object controlled through actions? Ships and teams are.
 	 */
 	protected boolean isControllable;
 
@@ -74,12 +75,12 @@ abstract public class AbstractObject {
 	 * Id to track over cloning
 	 */
 	protected UUID id;
-	
+
 	/**
 	 * flag to allow an object to respawn or not
 	 */
 	protected boolean respawn;
-	
+
 	/**
 	 * All objects start at rest
 	 */
@@ -87,7 +88,7 @@ abstract public class AbstractObject {
 		this.mass = mass;
 		this.originalMass = mass;
 		this.radius = radius;
-		position = new Position(0,0);
+		position = new Position(0, 0);
 		this.id = UUID.randomUUID();
 		resources = new ResourcePile();
 		this.numFlags = 0;
@@ -110,7 +111,6 @@ abstract public class AbstractObject {
 		this.numCores = 0;
 	}
 
-	
 	/**
 	 * @param isAlive set to true if the object is alive
 	 */
@@ -119,13 +119,13 @@ abstract public class AbstractObject {
 	}
 
 	/**
-	 * @param isDrawable set to true if the object is drawable. Note it is only 
-	 * drawn if it is alive as well.
+	 * @param isDrawable set to true if the object is drawable. Note it is only
+	 *                   drawn if it is alive as well.
 	 */
 	public void setDrawable(boolean isDrawable) {
 		this.isDrawable = isDrawable;
 	}
-	
+
 	/**
 	 * Is this object alive?
 	 * 
@@ -150,7 +150,7 @@ abstract public class AbstractObject {
 	public Position getPosition() {
 		return position;
 	}
-	
+
 	/**
 	 * Move the object (should only be called inside the simulator)
 	 * 
@@ -162,14 +162,16 @@ abstract public class AbstractObject {
 
 	/**
 	 * Return the radius of the object
+	 * 
 	 * @return
 	 */
 	public int getRadius() {
 		return radius;
 	}
-	
+
 	/**
 	 * Get the mass of the object
+	 * 
 	 * @return the mass of the object
 	 */
 	public int getMass() {
@@ -194,7 +196,7 @@ abstract public class AbstractObject {
 		resources.add(newResources);
 		setMass((int) (ResourceFactory.REFINED_RESOURCE_DENSITY_MULTIPLIER * resources.getMass() + originalMass));
 	}
-	
+
 	/**
 	 * Get the current available resources
 	 * 
@@ -211,7 +213,6 @@ abstract public class AbstractObject {
 		resources.reset();
 		setMass(originalMass);
 	}
-	
 
 	/**
 	 * @return the graphic, which is what is drawn in the graphics window
@@ -222,6 +223,7 @@ abstract public class AbstractObject {
 
 	/**
 	 * Is this object controlled by an external client?
+	 * 
 	 * @return
 	 */
 	public boolean isControllable() {
@@ -229,22 +231,22 @@ abstract public class AbstractObject {
 	}
 
 	/**
-	 * is the object moveable? 
+	 * is the object moveable?
+	 * 
 	 * @return
 	 */
 	public boolean isMoveable() {
 		return isMoveable;
 	}
-	
-	
+
 	/**
-	 * Return true if this object can respawn now and false otherwise.
-	 * Assumes you can respawn immediately unless you override.
+	 * Return true if this object can respawn now and false otherwise. Assumes you
+	 * can respawn immediately unless you override.
 	 */
 	public boolean canRespawn() {
 		return respawn;
 	}
-	
+
 	/**
 	 * Set the respawn flag
 	 * 
@@ -254,16 +256,16 @@ abstract public class AbstractObject {
 	public void setRespawn(boolean newRespawn) {
 		this.respawn = newRespawn;
 	}
-	
+
 	/**
 	 * Gets the unique id for this object
+	 * 
 	 * @return
 	 */
 	public UUID getId() {
 		return id;
 	}
 
-	
 	/**
 	 * Hash on the UUID
 	 */
@@ -307,7 +309,7 @@ abstract public class AbstractObject {
 	public String toString() {
 		return "AbstractObject at " + position;
 	}
-	
+
 	/**
 	 * Resets the UUID of the object (for respawning)
 	 */
@@ -317,12 +319,13 @@ abstract public class AbstractObject {
 
 	/**
 	 * Get the total number of flags owned by this object (ship or base)
+	 * 
 	 * @return
 	 */
 	public int getNumFlags() {
 		return numFlags;
 	}
-	
+
 	/**
 	 * Increment the number of flags held by this object
 	 */
@@ -332,17 +335,18 @@ abstract public class AbstractObject {
 
 	/**
 	 * Get the total number of cores owned by this object (ship or base)
+	 * 
 	 * @return
 	 */
 	public int getNumCores() {
 		return numCores;
 	}
-	
+
 	/**
 	 * Increment the number of cores held by this object
 	 */
 	public void incrementCores(int number) {
-		numCores+= number;
+		numCores += number;
 	}
 
 }

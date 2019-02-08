@@ -26,15 +26,15 @@ public class TeamInfoPanel extends JPanel {
 	ResourcesPanel resourcesPanel;
 	DamagePanel damagePanel;
 	JLabel score, flags, cores;
-	
+
 	public TeamInfoPanel(Team team) {
 		this.team = team;
-		
+
 		setBorder(BorderFactory.createLineBorder(team.getTeamColor(), 3));
 		constraints = new GridBagConstraints();
-		//constraints.insets = new Insets(10, 10, 10, 10);
+		// constraints.insets = new Insets(10, 10, 10, 10);
 		setLayout(new GridBagLayout());
-		
+
 		JLabel name = new JLabel(team.getLadderName());
 		constraints.insets = new Insets(1, 1, 1, 1);
 		constraints.gridx = 0;
@@ -77,8 +77,7 @@ public class TeamInfoPanel extends JPanel {
 		constraints.gridy = 3;
 		constraints.gridwidth = GridBagConstraints.REMAINDER;
 		add(flags, constraints);
-		
-		
+
 		resourcesPanel = new ResourcesPanel();
 		constraints.gridx = 0;
 		constraints.gridy = 4;
@@ -98,5 +97,5 @@ public class TeamInfoPanel extends JPanel {
 		flags.setText(team.getTotalFlagsCollected() + "");
 		cores.setText(team.getTotalCoresCollected() + "");
 	}
-	
+
 }

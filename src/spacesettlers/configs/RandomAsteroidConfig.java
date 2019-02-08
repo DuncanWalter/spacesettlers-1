@@ -2,26 +2,27 @@ package spacesettlers.configs;
 
 /**
  * Configuration for radomly generated asteroids
+ * 
  * @author amy
  *
  */
 public class RandomAsteroidConfig {
 	double probabilityMineable;
-	
+
 	int numberInitialAsteroids;
-	
+
 	int maximumNumberAsteroids;
-	
+
 	double probabilityMoveable;
-	
+
 	double maxInitialVelocity;
-	
+
 	double probabilityFuelType;
-	
+
 	double probabilityWaterType;
-	
+
 	double probabilityMetalsType;
-	
+
 	/**
 	 * @return the probabilityMineable
 	 */
@@ -63,5 +64,4 @@ public class RandomAsteroidConfig {
 		return probabilityMetalsType;
 	}
 
-	
 }

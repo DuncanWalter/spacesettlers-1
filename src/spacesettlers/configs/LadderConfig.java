@@ -10,12 +10,12 @@ public class LadderConfig {
 	 * The maximum number of variable (e.g. can change each match) teams in a game
 	 */
 	int maximumNumberVariableTeams;
-	
+
 	/**
 	 * The number of times each match is repeated
 	 */
 	int numRepeatMatches;
-	
+
 	/**
 	 * Write out the results to this file
 	 */
@@ -28,8 +28,6 @@ public class LadderConfig {
 	public void setMaximumNumberVariableTeams(int maximumNumberVariableTeams) {
 		this.maximumNumberVariableTeams = maximumNumberVariableTeams;
 	}
-	
-	
 
 	public String getOutputFileName() {
 		return outputFileName;

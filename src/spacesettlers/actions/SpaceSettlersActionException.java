@@ -7,5 +7,4 @@ public class SpaceSettlersActionException extends Exception {
 		super(message);
 	}
 
-	
 }
