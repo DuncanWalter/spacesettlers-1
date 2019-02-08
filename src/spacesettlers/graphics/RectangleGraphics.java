@@ -8,7 +8,7 @@ import spacesettlers.gui.JSpaceSettlersComponent;
 import spacesettlers.utilities.Position;
 
 /**
- * Contributed by Michael Short,  spring 2013
+ * Contributed by Michael Short, spring 2013
  * 
  */
 public class RectangleGraphics extends SpacewarGraphics {
@@ -23,14 +23,13 @@ public class RectangleGraphics extends SpacewarGraphics {
   private Position currentPosition;
   /** Whether to fill or just outline the shape when drawn */
   private boolean fill;
-  
+
   public static final int DEFAULT_SIZE = 10;
 
-
   /**
-   * @param width The width of the rectangle
-   * @param height The height of the rectangle
-   * @param color Color of the graphic
+   * @param width    The width of the rectangle
+   * @param height   The height of the rectangle
+   * @param color    Color of the graphic
    * @param position (x,y) position in the 2D plane
    */
   public RectangleGraphics(int width, int height, Color color, Position position) {
@@ -43,8 +42,9 @@ public class RectangleGraphics extends SpacewarGraphics {
 
   /**
    * Shorthand for making a square.
-   * @param size The width and height of the rectangle
-   * @param color Color of the graphic
+   * 
+   * @param size     The width and height of the rectangle
+   * @param color    Color of the graphic
    * @param position (x,y) position in the 2D plane
    */
   public RectangleGraphics(int size, Color color, Position position) {
@@ -54,10 +54,11 @@ public class RectangleGraphics extends SpacewarGraphics {
     this.color = color;
     this.currentPosition = position;
   }
-  
+
   /**
    * Default constructor with size = 10 pixels
-   * @param color Color of the graphic
+   * 
+   * @param color    Color of the graphic
    * @param position (x,y) position in the 2D plane
    */
   public RectangleGraphics(Color color, Position position) {
@@ -79,7 +80,7 @@ public class RectangleGraphics extends SpacewarGraphics {
   public void draw(Graphics2D graphics) {
     Rectangle2D.Double shape = new Rectangle2D.Double(drawLocation.getX(), drawLocation.getY(), width, height);
     graphics.setColor(color);
-    if(fill)
+    if (fill)
       graphics.fill(shape);
     graphics.setStroke(JSpaceSettlersComponent.STROKE);
     graphics.draw(shape);
@@ -92,9 +93,10 @@ public class RectangleGraphics extends SpacewarGraphics {
 
   /**
    * Whether to fill the graphic or just outline it when drawing
+   * 
    * @param fill True if rectangle should be filled
    */
-  public void setFill (boolean fill) {
+  public void setFill(boolean fill) {
     this.fill = fill;
   }
 

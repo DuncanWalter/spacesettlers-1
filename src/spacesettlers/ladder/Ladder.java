@@ -20,6 +20,7 @@ import com.thoughtworks.xstream.XStream;
 
 /**
  * Runs the ladder
+ * 
  * @author amy
  *
  */
@@ -32,16 +33,17 @@ public class Ladder {
 
 	JSAPResult parserConfig;
 
-	HashMap <String, TeamRecord> ladderResultsMap;
-	
+	HashMap<String, TeamRecord> ladderResultsMap;
+
 	ArrayList<TeamRecord> sortedLadderResults;
-	
+
 	ArrayList<String> ladderOutputString;
 
 	/**
 	 * Make a new ladder
+	 * 
 	 * @param config
-	 * @throws SimulatorException 
+	 * @throws SimulatorException
 	 */
 	public Ladder(JSAPResult parserConfig) throws SimulatorException {
 		loadConfigFiles(parserConfig);
@@ -60,7 +62,8 @@ public class Ladder {
 
 	/**
 	 * Load in the configuration files
-	 * @throws SimulatorException 
+	 * 
+	 * @throws SimulatorException
 	 * 
 	 */
 	public void loadConfigFiles(JSAPResult parserConfig) throws SimulatorException {
@@ -75,8 +78,7 @@ public class Ladder {
 		xstream.alias("FixedAsteroidConfig", FixedAsteroidConfig.class);
 		xstream.alias("FlagConfig", FlagConfig.class);
 
-
-		try { 
+		try {
 			simConfig = (SpaceSettlersConfig) xstream.fromXML(new File(configFile));
 		} catch (Exception e) {
 			throw new SimulatorException("Error parsing config file at string " + e.getMessage());
@@ -89,27 +91,26 @@ public class Ladder {
 		xstream.alias("LadderConfig", LadderConfig.class);
 		xstream.alias("HighLevelTeamConfig", HighLevelTeamConfig.class);
 
-		try { 
+		try {
 			ladderConfig = (LadderConfig) xstream.fromXML(new File(configFile));
-			
+
 			ladderConfig.makePlayerNamesUnique();
-			
-			
+
 		} catch (Exception e) {
 			throw new SimulatorException("Error parsing config file at string " + e.getMessage());
 		}
-
 
 	}
 
 	/**
 	 * Runs the ladder for the specified number of games
-	 * @throws SimulatorException 
+	 * 
+	 * @throws SimulatorException
 	 */
 	@SuppressWarnings("unchecked")
 	public void run() throws SimulatorException {
-		ArrayList<HighLevelTeamConfig[]>clientsPerMatch = getAllClientsForAllMatches();
-		
+		ArrayList<HighLevelTeamConfig[]> clientsPerMatch = getAllClientsForAllMatches();
+
 		int numGames = clientsPerMatch.size() * ladderConfig.getNumRepeatMatches();
 		System.out.println("Ladder will run " + numGames + " games");
 		System.out.println("Variable teams are: ");
@@ -124,7 +125,7 @@ public class Ladder {
 				// setup the simulator for this match
 				simConfig.setTeams(teamsForMatch);
 
-				// set the bases to match the teams for this game.  Read in the ones
+				// set the bases to match the teams for this game. Read in the ones
 				// from the config file first (and rename them)
 				// only make new ones if we don't have enough
 				BaseConfig[] defaultBases = simConfig.getBases();
@@ -138,12 +139,13 @@ public class Ladder {
 					}
 				}
 				simConfig.setBases(baseConfig);
-				
+
 				// if there are flags, then set the flags to also match the teams for this game
 				FlagConfig[] flagConfigs = simConfig.getFlags();
 				if (flagConfigs != null && flagConfigs.length > 0) {
 					if (flagConfigs.length != teamsForMatch.length) {
-						throw new SimulatorException("Error: The number of flags in the config file doesn't match the number of teams for the match");
+						throw new SimulatorException(
+								"Error: The number of flags in the config file doesn't match the number of teams for the match");
 					}
 					for (int i = 0; i < teamsForMatch.length; i++) {
 						flagConfigs[i].setTeamName(teamsForMatch[i].getTeamName());
@@ -180,7 +182,7 @@ public class Ladder {
 						str = "Team: " + team.getLadderName() + " scored " + team.getScore();
 						ladderOutputString.add(str);
 						System.out.println(str);
-						
+
 						TeamRecord thisRecord;
 						if (ladderResultsMap.containsKey(team.getLadderName())) {
 							thisRecord = ladderResultsMap.get(team.getLadderName());
@@ -212,9 +214,9 @@ public class Ladder {
 		}
 	}
 
-
 	/**
 	 * Return the results of the ladder
+	 * 
 	 * @return
 	 */
 	public ArrayList<TeamRecord> getSortedLadderResults() {
@@ -222,8 +224,8 @@ public class Ladder {
 	}
 
 	/**
-	 * Takes the list of variable  and static clients and the number to play per game and returns the full
-	 * list of combinations
+	 * Takes the list of variable and static clients and the number to play per game
+	 * and returns the full list of combinations
 	 * 
 	 * @return
 	 */
@@ -247,7 +249,6 @@ public class Ladder {
 				teams[i] = variableTeams[indices[i]];
 			}
 
-
 			// now add the static ones
 			int index = indices.length;
 			for (HighLevelTeamConfig staticTeam : ladderConfig.getStaticTeams()) {
@@ -263,33 +264,33 @@ public class Ladder {
 	}
 
 	/**
-	 * Returns the indices for n choose k (to be used to make the teams).  This isn't pretty
-	 * but it recursively enumerates the full set of indices for n choose k, assuming
-	 * indices are zero-based.
+	 * Returns the indices for n choose k (to be used to make the teams). This isn't
+	 * pretty but it recursively enumerates the full set of indices for n choose k,
+	 * assuming indices are zero-based.
 	 * 
 	 * @param n
 	 * @param k
 	 * @return
 	 */
 	protected ArrayList<int[]> getIndicesForNChooseK(int n, int k) {
-		ArrayList<int[]> indices = new ArrayList<int[]> ();
+		ArrayList<int[]> indices = new ArrayList<int[]>();
 
 		// recursion worst case
 		if (k == 0) {
 			return indices;
 		}
-		
+
 		// base case of the recursion
 		if (k == 1 || n == 1) {
 			for (int i = 0; i < n; i++) {
-				indices.add(new int[]{i});
+				indices.add(new int[] { i });
 			}
 			return indices;
 		}
 
 		// call this recursively
 		for (int i = 0; i < (n - k + 1); i++) {
-			ArrayList<int[]> recurseAnswers = getIndicesForNChooseK(n-1, k-1);
+			ArrayList<int[]> recurseAnswers = getIndicesForNChooseK(n - 1, k - 1);
 
 			// now add the recusive answer to this number
 			for (int[] recurseAnswer : recurseAnswers) {
@@ -314,8 +315,8 @@ public class Ladder {
 	}
 
 	/**
-	 * Compute the number for n choose k.  There are more efficient
-	 * implementations but this isn't called much.
+	 * Compute the number for n choose k. There are more efficient implementations
+	 * but this isn't called much.
 	 * 
 	 * @param n
 	 * @param k
@@ -331,6 +332,7 @@ public class Ladder {
 
 	/**
 	 * Compute the factorial of n
+	 * 
 	 * @param n
 	 * @return
 	 */
@@ -353,7 +355,7 @@ public class Ladder {
 			// write the top of the table and page
 			String str = getHTMLHeader();
 			writer.write(str);
-			
+
 			// write the results
 			str = getHTMLTableResults();
 			writer.write(str);
@@ -364,16 +366,13 @@ public class Ladder {
 			// end the table and page
 			str = getHTMLFooter();
 			writer.write(str);
-			
+
 			writer.close();
 		} catch (IOException e) {
 			System.err.println("Error writing ladder.");
 			e.printStackTrace();
 		}
-		
-		
-		
-		
+
 	}
 
 	/**
@@ -390,7 +389,7 @@ public class Ladder {
 		str += "<th>Average Beacons</th>";
 		str += "<th>Average Resources</th>";
 		str += "</tr>";
-		
+
 		int place = 1;
 		for (TeamRecord record : sortedLadderResults) {
 			str += "<tr>\n";
@@ -402,24 +401,24 @@ public class Ladder {
 			str += "</tr>";
 			place++;
 		}
-		
+
 		str += "</table>";
-		
+
 		return str;
 	}
 
 	/**
-	 * Writes out the game results into a string 
+	 * Writes out the game results into a string
 	 */
 	private String getHTMLStringResults() {
 		String str = "<ul>";
-		
+
 		for (String gameString : ladderOutputString) {
 			str += "<li>" + gameString.replaceAll("<", "&lt;").replaceAll(">", "&gt;") + "\n";
 		}
-		
+
 		str += "</ul>";
-		
+
 		return str;
 	}
 
@@ -433,7 +432,7 @@ public class Ladder {
 		String str = "<html>\n";
 		str += "<title>Spacewar Ladder</title>\n";
 		str += "<body bgcolor=\"white\">\n";
-		
+
 		return str;
 	}
 
@@ -448,11 +447,8 @@ public class Ladder {
 		String dateString = dateFormat.format(new Date());
 		str += "Last updated: " + dateString + "\n";
 		str += "</body></html>\n";
-		
+
 		return str;
 	}
-
-
-
 
 }

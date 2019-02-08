@@ -30,18 +30,19 @@ import spacesettlers.simulator.Toroidal2DPhysics;
 import spacesettlers.utilities.Position;
 
 /**
- * Collects nearby asteroids and brings them to the base, picks up beacons as needed for energy.
+ * Collects nearby asteroids and brings them to the base, picks up beacons as
+ * needed for energy.
  * 
- * If there is more than one ship, this version happily collects asteroids with as many ships as it
- * has.  it never shoots (it is a pacifist)
+ * If there is more than one ship, this version happily collects asteroids with
+ * as many ships as it has. it never shoots (it is a pacifist)
  * 
  * @author amy
  */
 public class PacifistHeuristicAsteroidCollectorTeamClient extends TeamClient {
-	HashMap <UUID, Ship> asteroidToShipMap;
-	HashMap <UUID, Boolean> aimingForBase;
-	HashMap <UUID, Boolean> justHitBase;
-	
+	HashMap<UUID, Ship> asteroidToShipMap;
+	HashMap<UUID, Boolean> aimingForBase;
+	HashMap<UUID, Boolean> justHitBase;
+
 	/**
 	 * Example knowledge used to show how to load in/save out to files for learning
 	 */
@@ -55,30 +56,30 @@ public class PacifistHeuristicAsteroidCollectorTeamClient extends TeamClient {
 		HashMap<UUID, AbstractAction> actions = new HashMap<UUID, AbstractAction>();
 
 		// loop through each ship
-		for (AbstractObject actionable :  actionableObjects) {
+		for (AbstractObject actionable : actionableObjects) {
 			if (actionable instanceof Ship) {
 				Ship ship = (Ship) actionable;
 
 				AbstractAction action;
 				action = getAsteroidCollectorAction(space, ship);
 				actions.put(ship.getId(), action);
-				
+
 			} else {
-				// it is a base.  Heuristically decide when to use the shield (TODO)
+				// it is a base. Heuristically decide when to use the shield (TODO)
 				actions.put(actionable.getId(), new DoNothingAction());
 			}
-		} 
+		}
 		return actions;
 	}
-	
+
 	/**
 	 * Gets the action for the asteroid collecting ship
+	 * 
 	 * @param space
 	 * @param ship
 	 * @return
 	 */
-	private AbstractAction getAsteroidCollectorAction(Toroidal2DPhysics space,
-			Ship ship) {
+	private AbstractAction getAsteroidCollectorAction(Toroidal2DPhysics space, Ship ship) {
 		AbstractAction current = ship.getCurrentAction();
 		Position currentPosition = ship.getPosition();
 
@@ -105,39 +106,34 @@ public class PacifistHeuristicAsteroidCollectorTeamClient extends TeamClient {
 		}
 
 		// otherwise aim for the asteroid
-		if (current == null || current.isMovementFinished(space) || 
-				(justHitBase.containsKey(ship.getId()) && justHitBase.get(ship.getId()))) {
-			justHitBase.put(ship.getId(), false);			
+		if (current == null || current.isMovementFinished(space)
+				|| (justHitBase.containsKey(ship.getId()) && justHitBase.get(ship.getId()))) {
+			justHitBase.put(ship.getId(), false);
 			aimingForBase.put(ship.getId(), false);
 			Asteroid asteroid = pickHighestValueNearestFreeAsteroid(space, ship);
 
 			AbstractAction newAction = null;
 
-			/*if (asteroid == null) {
-				// there is no asteroid available so collect a beacon
-				Beacon beacon = pickNearestBeacon(space, ship);
-				// if there is no beacon, then just skip a turn
-				if (beacon == null) {
-					newAction = new DoNothingAction();
-				} else {
-					newAction = new MoveToObjectAction(space, currentPosition, beacon);
-				}
-			} else {
-				asteroidToShipMap.put(asteroid.getId(), ship);
-				newAction = new MoveToObjectAction(space, currentPosition, asteroid);
-			}*/
+			/*
+			 * if (asteroid == null) { // there is no asteroid available so collect a beacon
+			 * Beacon beacon = pickNearestBeacon(space, ship); // if there is no beacon,
+			 * then just skip a turn if (beacon == null) { newAction = new
+			 * DoNothingAction(); } else { newAction = new MoveToObjectAction(space,
+			 * currentPosition, beacon); } } else { asteroidToShipMap.put(asteroid.getId(),
+			 * ship); newAction = new MoveToObjectAction(space, currentPosition, asteroid);
+			 * }
+			 */
 			if (asteroid != null) {
 				asteroidToShipMap.put(asteroid.getId(), ship);
-				newAction = new MoveToObjectAction(space, currentPosition, asteroid, 
+				newAction = new MoveToObjectAction(space, currentPosition, asteroid,
 						asteroid.getPosition().getTranslationalVelocity());
 			}
-			
+
 			return newAction;
-		} 
-		
+		}
+
 		return ship.getCurrentAction();
 	}
-
 
 	/**
 	 * Find the base for this team nearest to this ship
@@ -163,7 +159,8 @@ public class PacifistHeuristicAsteroidCollectorTeamClient extends TeamClient {
 	}
 
 	/**
-	 * Returns the asteroid of highest value that isn't already being chased by this team
+	 * Returns the asteroid of highest value that isn't already being chased by this
+	 * team
 	 * 
 	 * @return
 	 */
@@ -179,20 +176,21 @@ public class PacifistHeuristicAsteroidCollectorTeamClient extends TeamClient {
 					double dist = space.findShortestDistance(asteroid.getPosition(), ship.getPosition());
 					if (dist < minDistance) {
 						bestMoney = asteroid.getResources().getTotal();
-						//System.out.println("Considering asteroid " + asteroid.getId() + " as a best one");
+						// System.out.println("Considering asteroid " + asteroid.getId() + " as a best
+						// one");
 						bestAsteroid = asteroid;
 						minDistance = dist;
 					}
 				}
 			}
 		}
-		//System.out.println("Best asteroid has " + bestMoney);
+		// System.out.println("Best asteroid has " + bestMoney);
 		return bestAsteroid;
 	}
 
-
 	/**
 	 * Find the nearest beacon to this ship
+	 * 
 	 * @param space
 	 * @param ship
 	 * @return
@@ -215,8 +213,6 @@ public class PacifistHeuristicAsteroidCollectorTeamClient extends TeamClient {
 		return closestBeacon;
 	}
 
-
-
 	@Override
 	public void getMovementEnd(Toroidal2DPhysics space, Set<AbstractActionableObject> actionableObjects) {
 		ArrayList<Asteroid> finishedAsteroids = new ArrayList<Asteroid>();
@@ -224,28 +220,27 @@ public class PacifistHeuristicAsteroidCollectorTeamClient extends TeamClient {
 		for (UUID asteroidId : asteroidToShipMap.keySet()) {
 			Asteroid asteroid = (Asteroid) space.getObjectById(asteroidId);
 			if (asteroid == null || !asteroid.isAlive() || asteroid.isMoveable()) {
- 				finishedAsteroids.add(asteroid);
-				//System.out.println("Removing asteroid from map");
+				finishedAsteroids.add(asteroid);
+				// System.out.println("Removing asteroid from map");
 			}
 		}
 
 		for (Asteroid asteroid : finishedAsteroids) {
 			asteroidToShipMap.remove(asteroid.getId());
 		}
-		
+
 		// check to see who bounced off bases
 		for (UUID shipId : aimingForBase.keySet()) {
 			if (aimingForBase.get(shipId)) {
 				Ship ship = (Ship) space.getObjectById(shipId);
-				if (ship.getResources().getTotal() == 0 ) {
+				if (ship.getResources().getTotal() == 0) {
 					// we hit the base (or died, either way, we are not aiming for base now)
-					//System.out.println("Hit the base and dropped off resources");
+					// System.out.println("Hit the base and dropped off resources");
 					aimingForBase.put(shipId, false);
 					justHitBase.put(shipId, true);
 				}
 			}
 		}
-
 
 	}
 
@@ -257,11 +252,11 @@ public class PacifistHeuristicAsteroidCollectorTeamClient extends TeamClient {
 		asteroidToShipMap = new HashMap<UUID, Ship>();
 		aimingForBase = new HashMap<UUID, Boolean>();
 		justHitBase = new HashMap<UUID, Boolean>();
-		
+
 		XStream xstream = new XStream();
 		xstream.alias("ExampleKnowledge", ExampleKnowledge.class);
 
-		try { 
+		try {
 			myKnowledge = (ExampleKnowledge) xstream.fromXML(new File(knowledgeFile));
 		} catch (XStreamException e) {
 			// if you get an error, handle it other than a null pointer because
@@ -271,17 +266,17 @@ public class PacifistHeuristicAsteroidCollectorTeamClient extends TeamClient {
 	}
 
 	/**
-	 * Demonstrates saving out to the xstream file
-	 * You can save out other ways too.  This is a human-readable way to examine
-	 * the knowledge you have learned.
+	 * Demonstrates saving out to the xstream file You can save out other ways too.
+	 * This is a human-readable way to examine the knowledge you have learned.
 	 */
 	@Override
 	public void shutDown(Toroidal2DPhysics space) {
 		XStream xstream = new XStream();
 		xstream.alias("ExampleKnowledge", ExampleKnowledge.class);
 
-		try { 
-			// if you want to compress the file, change FileOuputStream to a GZIPOutputStream
+		try {
+			// if you want to compress the file, change FileOuputStream to a
+			// GZIPOutputStream
 			xstream.toXML(myKnowledge, new FileOutputStream(new File(knowledgeFile)));
 		} catch (XStreamException e) {
 			// if you get an error, handle it somehow as it means your knowledge didn't save
@@ -301,12 +296,11 @@ public class PacifistHeuristicAsteroidCollectorTeamClient extends TeamClient {
 
 	@Override
 	/**
-	 * If there is enough resourcesAvailable, buy a base.  Place it by finding a ship that is sufficiently
-	 * far away from the existing bases
+	 * If there is enough resourcesAvailable, buy a base. Place it by finding a ship
+	 * that is sufficiently far away from the existing bases
 	 */
 	public Map<UUID, PurchaseTypes> getTeamPurchases(Toroidal2DPhysics space,
-			Set<AbstractActionableObject> actionableObjects, 
-			ResourcePile resourcesAvailable, 
+			Set<AbstractActionableObject> actionableObjects, ResourcePile resourcesAvailable,
 			PurchaseCosts purchaseCosts) {
 
 		HashMap<UUID, PurchaseTypes> purchases = new HashMap<UUID, PurchaseTypes>();
@@ -332,19 +326,19 @@ public class PacifistHeuristicAsteroidCollectorTeamClient extends TeamClient {
 					if (buyBase) {
 						purchases.put(ship.getId(), PurchaseTypes.BASE);
 						bought_base = true;
-						//System.out.println("Buying a base!!");
+						// System.out.println("Buying a base!!");
 						break;
 					}
 				}
-			}		
-		} 
-		
+			}
+		}
+
 		// can I buy a ship?
 		if (purchaseCosts.canAfford(PurchaseTypes.SHIP, resourcesAvailable) && bought_base == false) {
 			for (AbstractActionableObject actionableObject : actionableObjects) {
 				if (actionableObject instanceof Base) {
 					Base base = (Base) actionableObject;
-					
+
 					purchases.put(base.getId(), PurchaseTypes.SHIP);
 					break;
 				}
@@ -353,12 +347,12 @@ public class PacifistHeuristicAsteroidCollectorTeamClient extends TeamClient {
 
 		}
 
-
 		return purchases;
 	}
 
 	/**
-	 * The pacifist asteroid collector doesn't use power ups 
+	 * The pacifist asteroid collector doesn't use power ups
+	 * 
 	 * @param space
 	 * @param actionableObjects
 	 * @return
@@ -368,7 +362,6 @@ public class PacifistHeuristicAsteroidCollectorTeamClient extends TeamClient {
 			Set<AbstractActionableObject> actionableObjects) {
 		HashMap<UUID, SpaceSettlersPowerupEnum> powerUps = new HashMap<UUID, SpaceSettlersPowerupEnum>();
 
-		
 		return powerUps;
 	}
 

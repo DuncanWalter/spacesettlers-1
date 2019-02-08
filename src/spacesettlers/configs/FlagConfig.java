@@ -10,9 +10,9 @@ import spacesettlers.utilities.Position;
  */
 public class FlagConfig {
 	String teamName;
-	
-	int [] startX;
-	int [] startY;
+
+	int[] startX;
+	int[] startY;
 
 	public String getTeamName() {
 		return teamName;
@@ -29,8 +29,5 @@ public class FlagConfig {
 	public void setTeamName(String teamName) {
 		this.teamName = teamName;
 	}
-	
-	
 
-	
 }

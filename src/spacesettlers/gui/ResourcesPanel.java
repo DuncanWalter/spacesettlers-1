@@ -25,8 +25,8 @@ public class ResourcesPanel extends JPanel {
 	JLabel waterAvail, waterTotal, fuelAvail, fuelTotal, metalsAvail, metalsTotal;
 
 	public ResourcesPanel() {
-		setLayout(new GridLayout(4,3, 4, 1));
-		
+		setLayout(new GridLayout(4, 3, 4, 1));
+
 		// row 1: the titles
 		JLabel resources = new JLabel("Resources");
 		add(resources);
@@ -36,14 +36,14 @@ public class ResourcesPanel extends JPanel {
 
 		JLabel total = new JLabel("Total");
 		add(total);
-		
+
 		// the data: next row is water
 		JLabel water = new JLabel("Water: ");
 		add(water);
-		
+
 		waterAvail = new JLabel("0");
 		add(waterAvail);
-		
+
 		waterTotal = new JLabel("0");
 		add(waterTotal);
 
@@ -53,21 +53,21 @@ public class ResourcesPanel extends JPanel {
 
 		fuelAvail = new JLabel("0");
 		add(fuelAvail);
-		
+
 		fuelTotal = new JLabel("0");
 		add(fuelTotal);
-		
+
 		// metals row
 		JLabel metals = new JLabel("Metals: ");
 		add(metals);
 
 		metalsAvail = new JLabel("0");
 		add(metalsAvail);
-		
+
 		metalsTotal = new JLabel("0");
 		add(metalsTotal);
 	}
-	
+
 	public void updateData(SpaceSettlersSimulator simulator, String teamName) {
 		Team team = null;
 		for (Team curTeam : simulator.getTeams()) {
@@ -76,17 +76,17 @@ public class ResourcesPanel extends JPanel {
 				break;
 			}
 		}
-		
+
 		ResourcePile avail = team.getAvailableResources();
 		ResourcePile total = team.getTotalResources();
-		
+
 		waterAvail.setText("" + avail.getResourceQuantity(ResourceTypes.WATER));
 		fuelAvail.setText("" + avail.getResourceQuantity(ResourceTypes.FUEL));
 		metalsAvail.setText("" + avail.getResourceQuantity(ResourceTypes.METALS));
 		waterTotal.setText("" + total.getResourceQuantity(ResourceTypes.WATER));
 		fuelTotal.setText("" + total.getResourceQuantity(ResourceTypes.FUEL));
 		metalsTotal.setText("" + total.getResourceQuantity(ResourceTypes.METALS));
-		
+
 	}
 
 	public void updateData(AbstractObject object) {
@@ -108,10 +108,8 @@ public class ResourcesPanel extends JPanel {
 		} else if (object.getClass() == Beacon.class) {
 			Beacon beacon = (Beacon) object;
 		}
-			
-		
-		
-		if (avail != null) {	
+
+		if (avail != null) {
 			waterAvail.setText("" + avail.getResourceQuantity(ResourceTypes.WATER));
 			fuelAvail.setText("" + avail.getResourceQuantity(ResourceTypes.FUEL));
 			metalsAvail.setText("" + avail.getResourceQuantity(ResourceTypes.METALS));
@@ -126,8 +124,7 @@ public class ResourcesPanel extends JPanel {
 			fuelTotal.setText("0");
 			metalsTotal.setText("0");
 		}
-		
+
 	}
 
-	
 }

@@ -24,26 +24,26 @@ import spacesettlers.utilities.Position;
  */
 public class StarGraphics extends SpacewarGraphics {
 	private int radius;
-    Color color;
-    Position currentPosition;
-    public static final int DEFAULT_RADIUS = 5;
-    public static final Shape STAR_SHAPE = new Polygon(new int[]{-1, 4, 14, 7, 10, -1, -10, -7, -14, -4}, 
-    		new int[]{-14, -4, -3, 4, 14, 9, 14, 4, -3, -4}, 10);
+	Color color;
+	Position currentPosition;
+	public static final int DEFAULT_RADIUS = 5;
+	public static final Shape STAR_SHAPE = new Polygon(new int[] { -1, 4, 14, 7, 10, -1, -10, -7, -14, -4 },
+			new int[] { -14, -4, -3, 4, 14, 9, 14, 4, -3, -4 }, 10);
 
-    public StarGraphics(int radius, Color color, Position position) {
-        super(radius * 2, radius * 2);
-        this.radius = radius;
-        this.color = color;
-        this.currentPosition = position;
-    }
+	public StarGraphics(int radius, Color color, Position position) {
+		super(radius * 2, radius * 2);
+		this.radius = radius;
+		this.color = color;
+		this.currentPosition = position;
+	}
 
-    public StarGraphics(Color color, Position position) {
-        super(DEFAULT_RADIUS * 2, DEFAULT_RADIUS * 2);
-        this.radius = DEFAULT_RADIUS;
-        this.color = color;
-        this.currentPosition = position;
-    }
-    
+	public StarGraphics(Color color, Position position) {
+		super(DEFAULT_RADIUS * 2, DEFAULT_RADIUS * 2);
+		this.radius = DEFAULT_RADIUS;
+		this.color = color;
+		this.currentPosition = position;
+	}
+
 	public Position getActualLocation() {
 		return currentPosition;
 	}
@@ -54,6 +54,7 @@ public class StarGraphics extends SpacewarGraphics {
 
 	/**
 	 * Change the color of the graphic
+	 * 
 	 * @param color
 	 */
 	public void setColor(Color color) {
@@ -61,16 +62,17 @@ public class StarGraphics extends SpacewarGraphics {
 	}
 
 	/**
-	 * Draws a star shape after translating it to the current location where it should appear
+	 * Draws a star shape after translating it to the current location where it
+	 * should appear
 	 */
 	public void draw(Graphics2D graphics) {
-        final AffineTransform transform =
-                AffineTransform.getTranslateInstance(drawLocation.getX(), drawLocation.getY());
-        transform.scale(.6, .6);
-        Shape newStarShape = transform.createTransformedShape(STAR_SHAPE);
-		
-        graphics.setColor(color);
-        graphics.fill(newStarShape);
+		final AffineTransform transform = AffineTransform.getTranslateInstance(drawLocation.getX(),
+				drawLocation.getY());
+		transform.scale(.6, .6);
+		Shape newStarShape = transform.createTransformedShape(STAR_SHAPE);
+
+		graphics.setColor(color);
+		graphics.fill(newStarShape);
 	}
 
 	public boolean isDrawable() {

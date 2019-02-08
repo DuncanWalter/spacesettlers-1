@@ -14,7 +14,8 @@ public class RunLadder {
 
 	/**
 	 * Make a new ladder
-	 * @throws SimulatorException 
+	 * 
+	 * @throws SimulatorException
 	 */
 	public RunLadder(String[] args) throws SimulatorException {
 		SimpleJSAP parser = initializeParser(args);
@@ -24,6 +25,7 @@ public class RunLadder {
 
 	/**
 	 * Actually parse the command line arguments
+	 * 
 	 * @param args
 	 * @param parser
 	 * @return
@@ -39,30 +41,32 @@ public class RunLadder {
 	}
 
 	/**
-	 * Verify that the arguments are valid.  
+	 * Verify that the arguments are valid.
 	 */
 	private void verifyArguments() throws SimulatorException {
 		String configName = config.getString("simulatorConfigFile");
-		
+
 		int xmlIndex = configName.indexOf("xml");
 		// verify that the argument ended in .xml
 		if (xmlIndex != (configName.length() - 3)) {
-			throw new SimulatorException("Error: invalid simulator config file name " + configName + " It must end in .xml");
+			throw new SimulatorException(
+					"Error: invalid simulator config file name " + configName + " It must end in .xml");
 		}
 
 		configName = config.getString("ladderConfigFile");
-		
+
 		xmlIndex = configName.indexOf("xml");
 		// verify that the argument ended in .xml
 		if (xmlIndex != (configName.length() - 3)) {
-			throw new SimulatorException("Error: invalid ladder config file name " + configName + " It must end in .xml");
+			throw new SimulatorException(
+					"Error: invalid ladder config file name " + configName + " It must end in .xml");
 		}
 
 	}
 
-
 	/**
 	 * Initialize the parser with all of the command line arguments
+	 * 
 	 * @param args
 	 * @return
 	 */
@@ -71,31 +75,17 @@ public class RunLadder {
 
 		// create the parser and specify all the command line arguments
 		try {
-			parser = new SimpleJSAP(
-					"Simulator",
-					"Spacewar simulator",
-					new Parameter[] {
-						new FlaggedOption("simulatorConfigFile",
-								JSAP.STRING_PARSER, null, JSAP.REQUIRED,
-								JSAP.NO_SHORTFLAG, "simulatorConfigFile",
-								"configuration file for the simulator (xml)"), 
-						new FlaggedOption("ladderConfigFile",
-								JSAP.STRING_PARSER, null, JSAP.REQUIRED,
-								JSAP.NO_SHORTFLAG, "ladderConfigFile",
-								"configuration file for the simulator (xml)"), 
-						new FlaggedOption("configPath",
-								JSAP.STRING_PARSER, null, JSAP.REQUIRED,
-								JSAP.NO_SHORTFLAG, "configPath",
-								"path to the configuration files"), 
-						new FlaggedOption("graphics",
-								JSAP.BOOLEAN_PARSER, "false", JSAP.REQUIRED,
-								JSAP.NO_SHORTFLAG, "graphics",
-								"boolean stating if graphics are to be shown (true) or not (false)"),
-						new FlaggedOption("debug",
-								JSAP.BOOLEAN_PARSER, "false", JSAP.REQUIRED,
-								JSAP.NO_SHORTFLAG, "debug",
-								"boolean stating if debugging mode (single threading) is on (true) or not (false)"),
-					});
+			parser = new SimpleJSAP("Simulator", "Spacewar simulator", new Parameter[] {
+					new FlaggedOption("simulatorConfigFile", JSAP.STRING_PARSER, null, JSAP.REQUIRED, JSAP.NO_SHORTFLAG,
+							"simulatorConfigFile", "configuration file for the simulator (xml)"),
+					new FlaggedOption("ladderConfigFile", JSAP.STRING_PARSER, null, JSAP.REQUIRED, JSAP.NO_SHORTFLAG,
+							"ladderConfigFile", "configuration file for the simulator (xml)"),
+					new FlaggedOption("configPath", JSAP.STRING_PARSER, null, JSAP.REQUIRED, JSAP.NO_SHORTFLAG,
+							"configPath", "path to the configuration files"),
+					new FlaggedOption("graphics", JSAP.BOOLEAN_PARSER, "false", JSAP.REQUIRED, JSAP.NO_SHORTFLAG,
+							"graphics", "boolean stating if graphics are to be shown (true) or not (false)"),
+					new FlaggedOption("debug", JSAP.BOOLEAN_PARSER, "false", JSAP.REQUIRED, JSAP.NO_SHORTFLAG, "debug",
+							"boolean stating if debugging mode (single threading) is on (true) or not (false)"), });
 		} catch (JSAPException e) {
 			e.printStackTrace();
 			System.err.println("Error in the parser - exiting");
@@ -104,22 +94,20 @@ public class RunLadder {
 		return parser;
 	}
 
-	
-	
 	/**
 	 * @param args
-	 * @throws SimulatorException 
+	 * @throws SimulatorException
 	 */
 	public static void main(String[] args) throws SimulatorException {
 		RunLadder runLadder = new RunLadder(args);
-		
+
 		Ladder ladder = new Ladder(runLadder.config);
-		
+
 		ladder.run();
 
 		// TODO: save the final results to HTML
 		ladder.printResultsToHTML();
-		
+
 		System.out.println("Ladder finished!");
 		System.exit(0);
 	}

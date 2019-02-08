@@ -4,9 +4,9 @@ import spacesettlers.objects.Base;
 import spacesettlers.objects.AbstractActionableObject;
 
 /**
- * Doubles a base's healing energy increment on each time step.
- * It costs 0 to use.
- * It is removed from the list of available power ups to prevent it being used over and over.
+ * Doubles a base's healing energy increment on each time step. It costs 0 to
+ * use. It is removed from the list of available power ups to prevent it being
+ * used over and over.
  * 
  * @author amy
  *

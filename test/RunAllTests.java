@@ -7,14 +7,7 @@ import spacesettlers.utilities.UtilitiesTest;
 import spacesettlers.ladder.TestLadder;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({
-  ActionTests.class,
-  SimulatorTests.class,
-  TestLadder.class,
-  UtilitiesTest.class,
-})
+@Suite.SuiteClasses({ ActionTests.class, SimulatorTests.class, TestLadder.class, UtilitiesTest.class, })
 
 public class RunAllTests {
 }
-
-

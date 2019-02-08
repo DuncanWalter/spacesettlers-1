@@ -11,5 +11,4 @@ import javax.swing.border.Border;
 @SuppressWarnings("serial")
 public class MyEmptyBorder extends AbstractBorder {
 
-
 }

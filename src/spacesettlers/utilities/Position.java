@@ -2,6 +2,7 @@ package spacesettlers.utilities;
 
 /**
  * Position in space (x,y,orientation)
+ * 
  * @author amy
  *
  */
@@ -23,7 +24,7 @@ public class Position {
 		this.orientation = orientation;
 		velocity = new Vector2D();
 	}
-	
+
 	public Position(Vector2D vec) {
 		super();
 		this.x = vec.getXValue();
@@ -31,12 +32,12 @@ public class Position {
 		orientation = 0;
 		velocity = new Vector2D();
 	}
-	
+
 	public Position deepCopy() {
 		Position newPosition = new Position(x, y, orientation);
 		newPosition.velocity = new Vector2D(velocity);
 		newPosition.angularVelocity = angularVelocity;
-		
+
 		return newPosition;
 	}
 
@@ -51,7 +52,7 @@ public class Position {
 	public double getOrientation() {
 		return orientation;
 	}
-	
+
 	public void setX(double x) {
 		this.x = x;
 	}
@@ -63,31 +64,31 @@ public class Position {
 	public double getTotalTranslationalVelocity() {
 		return velocity.getTotal();
 	}
-	
+
 	public double getTranslationalVelocityX() {
 		return velocity.getXValue();
 	}
-	
+
 	public double getTranslationalVelocityY() {
 		return velocity.getYValue();
 	}
-	
+
 	public Vector2D getTranslationalVelocity() {
 		return velocity;
 	}
-	
+
 	public void setTranslationalVelocity(Vector2D newVel) {
 		this.velocity = newVel;
 	}
-	
+
 	public double getAngularVelocity() {
 		return angularVelocity;
 	}
-	
+
 	public void setOrientation(double orientation) {
 		this.orientation = orientation;
 	}
-	
+
 	public double getxVelocity() {
 		return velocity.getXValue();
 	}
@@ -104,9 +105,10 @@ public class Position {
 		String str = "(" + x + " , " + y + ", " + orientation + ") velocity: " + velocity + ", " + angularVelocity;
 		return str;
 	}
-	
+
 	/**
-	 * Compares positions on location (x,y) only and ignores orientation and velocities
+	 * Compares positions on location (x,y) only and ignores orientation and
+	 * velocities
 	 * 
 	 * @param newPosition
 	 * @return
@@ -121,16 +123,17 @@ public class Position {
 
 	/**
 	 * Verifies that all components of the position are finite and not NaN
-	 * @return true if the position is valid (finite and a number, doesn't check world size) and false otherwise 
+	 * 
+	 * @return true if the position is valid (finite and a number, doesn't check
+	 *         world size) and false otherwise
 	 */
 	public boolean isValid() {
-		if (Double.isFinite(x) && Double.isFinite(y) && 
-				Double.isFinite(angularVelocity) && Double.isFinite(orientation)  &&
-				velocity.isValid()) {
+		if (Double.isFinite(x) && Double.isFinite(y) && Double.isFinite(angularVelocity) && Double.isFinite(orientation)
+				&& velocity.isValid()) {
 			return true;
 		} else {
 			return false;
 		}
 	}
-	
+
 }

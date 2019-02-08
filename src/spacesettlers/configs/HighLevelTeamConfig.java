@@ -10,7 +10,7 @@ public class HighLevelTeamConfig {
 	 * The name of the team (will be used to match other items in the simulator)
 	 */
 	String teamName;
-	
+
 	/**
 	 * The name (and path) of the configuration file
 	 */
@@ -20,7 +20,7 @@ public class HighLevelTeamConfig {
 	 * Bounding box for the initialization of the team
 	 */
 	int initialRegionULX, initialRegionULY, initialRegionLRX, initialRegionLRY;
-		
+
 	public void setTeamName(String teamName) {
 		this.teamName = teamName;
 	}
@@ -38,7 +38,6 @@ public class HighLevelTeamConfig {
 	public String getConfigFile() {
 		return configFile;
 	}
-
 
 	public int getInitialRegionULX() {
 		return initialRegionULX;
@@ -79,7 +78,5 @@ public class HighLevelTeamConfig {
 		String str = "Team name: " + this.teamName + " From file " + this.configFile;
 		return str;
 	}
-	
-	
 
 }

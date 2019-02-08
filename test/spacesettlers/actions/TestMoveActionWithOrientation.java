@@ -15,6 +15,7 @@ import spacesettlers.utilities.Vector2D;
 
 /**
  * Ensure the pd control works
+ * 
  * @author amy
  *
  */
@@ -37,48 +38,45 @@ public class TestMoveActionWithOrientation {
 	/**
 	 * Test orienting in both directions
 	 * 
-	 * (40, 40)
-	 * 			(50,50)
-	 * (40, 60)
+	 * (40, 40) (50,50) (40, 60)
 	 * 
 	 * @throws SpaceSettlersActionException
 	 */
 	@Test
 	public void testpdControlOrientToGoal() throws SpaceSettlersActionException {
 		// first to -3pi/4
-		Position currentLoc = new Position(50,50, 0);
-		Position goalLoc = new Position(40,40, Math.PI);
-		
+		Position currentLoc = new Position(50, 50, 0);
+		Position goalLoc = new Position(40, 40, Math.PI);
+
 		moveAction = new MoveActionWithOrientation();
-	
+
 		double accel = moveAction.pdControlOrientToGoal(space, goalLoc, currentLoc, 0);
-		
+
 		Movement movement = new Movement();
-		
+
 		while (Math.abs(accel) > MoveAction.TARGET_REACHED_ACCEL) {
 			movement.setAngularAccleration(accel);
 			currentLoc = space.applyMovement(currentLoc, movement, timestep);
 			accel = moveAction.pdControlOrientToGoal(space, goalLoc, currentLoc, 0);
 		}
-		
+
 		assertEquals(currentLoc.getOrientation(), Math.PI, 0.01);
 
-	
 		// then to 3pi/4
-		currentLoc = new Position(50,50, 0);
+		currentLoc = new Position(50, 50, 0);
 		currentLoc.setOrientation(0);
-		goalLoc = new Position(40,60, -Math.PI);
-	
+		goalLoc = new Position(40, 60, -Math.PI);
+
 		accel = moveAction.pdControlOrientToGoal(space, goalLoc, currentLoc, 0);
-		
+
 		movement = new Movement();
-		
+
 		while (Math.abs(accel) > MoveAction.TARGET_REACHED_ACCEL) {
 			movement.setAngularAccleration(accel);
 			currentLoc = space.applyMovement(currentLoc, movement, timestep);
 			accel = moveAction.pdControlOrientToGoal(space, goalLoc, currentLoc, 0);
 		}
-		
+
 		assertEquals(currentLoc.getOrientation(), -Math.PI, 0.01);
 
 	}
@@ -86,100 +84,95 @@ public class TestMoveActionWithOrientation {
 	/**
 	 * Test moving to the goal
 	 * 
-	 * (40, 40)
-	 * 			(50,50)
-	 * (40, 60)
+	 * (40, 40) (50,50) (40, 60)
 	 * 
 	 * @throws SpaceSettlersActionException
 	 */
 	@Test
 	public void testpdControlMoveToGoal() throws SpaceSettlersActionException {
 		// first to -3pi/4
-		Position currentLoc = new Position(50,50);
-		Position goalLoc = new Position(40,40);
+		Position currentLoc = new Position(50, 50);
+		Position goalLoc = new Position(40, 40);
 		currentLoc.setOrientation(-(3 * Math.PI) / 4);
-		
+
 		moveAction = new MoveActionWithOrientation();
-	
+
 		Vector2D accel = moveAction.pdControlMoveToGoal(space, goalLoc, currentLoc, targetVelocity);
 		Movement movement = new Movement();
-		
+
 		while (accel.getMagnitude() > MoveAction.TARGET_REACHED_ACCEL) {
 			movement.setTranslationalAcceleration(accel);
 			currentLoc = space.applyMovement(currentLoc, movement, timestep);
 			accel = moveAction.pdControlMoveToGoal(space, goalLoc, currentLoc, targetVelocity);
 		}
-		
+
 		assertEquals(currentLoc.getOrientation(), -(3 * Math.PI) / 4, 0.01);
 		assertEquals(currentLoc.getX(), 40, 0.05);
 		assertEquals(currentLoc.getY(), 40, 0.05);
 
-	
 		// then to 3pi/4
-		currentLoc = new Position(50,50);
+		currentLoc = new Position(50, 50);
 		currentLoc.setOrientation(0);
-		goalLoc = new Position(40,60);
+		goalLoc = new Position(40, 60);
 		currentLoc.setOrientation((3 * Math.PI) / 4);
-		
+
 		accel = moveAction.pdControlMoveToGoal(space, goalLoc, currentLoc, targetVelocity);
-		
+
 		while (accel.getMagnitude() > MoveAction.TARGET_REACHED_ACCEL) {
 			movement.setTranslationalAcceleration(accel);
 			currentLoc = space.applyMovement(currentLoc, movement, timestep);
 			accel = moveAction.pdControlMoveToGoal(space, goalLoc, currentLoc, targetVelocity);
 		}
-		
+
 		assertEquals(currentLoc.getOrientation(), (3 * Math.PI) / 4, 0.01);
 		assertEquals(currentLoc.getX(), 40, 0.05);
 		assertEquals(currentLoc.getY(), 60, 0.05);
 
 	}
 
-	
 	/**
 	 * Test moving to the goal
 	 * 
-	 * (30, 50) 	(50,50)  (70, 50)
+	 * (30, 50) (50,50) (70, 50)
 	 * 
 	 * @throws SpaceSettlersActionException
 	 */
 	@Test
 	public void testpdControlMoveToAlongX() throws SpaceSettlersActionException {
 		// first positive x (60,50)
-		Position currentLoc = new Position(50,50);
-		Position goalLoc = new Position(70,50);
+		Position currentLoc = new Position(50, 50);
+		Position goalLoc = new Position(70, 50);
 		currentLoc.setOrientation(0);
-		
+
 		moveAction = new MoveActionWithOrientation();
-	
+
 		Vector2D accel = moveAction.pdControlMoveToGoal(space, goalLoc, currentLoc, targetVelocity);
 		Movement movement = new Movement();
-		
+
 		while (accel.getMagnitude() > MoveAction.TARGET_REACHED_ACCEL) {
 			movement.setTranslationalAcceleration(accel);
 			currentLoc = space.applyMovement(currentLoc, movement, timestep);
 			accel = moveAction.pdControlMoveToGoal(space, goalLoc, currentLoc, targetVelocity);
 		}
-		
+
 		assertEquals(currentLoc.getOrientation(), 0, 0.01);
 		assertEquals(currentLoc.getX(), 70, 0.05);
 		assertEquals(currentLoc.getY(), 50, 0.05);
 
-	
 		// then to the negative x
-		currentLoc = new Position(50,50);
+		currentLoc = new Position(50, 50);
 		currentLoc.setOrientation(0);
-		goalLoc = new Position(30,50);
+		goalLoc = new Position(30, 50);
 		currentLoc.setOrientation(-Math.PI);
-		
+
 		accel = moveAction.pdControlMoveToGoal(space, goalLoc, currentLoc, targetVelocity);
-		
+
 		while (accel.getMagnitude() > MoveAction.TARGET_REACHED_ACCEL) {
 			movement.setTranslationalAcceleration(accel);
 			currentLoc = space.applyMovement(currentLoc, movement, timestep);
 			accel = moveAction.pdControlMoveToGoal(space, goalLoc, currentLoc, targetVelocity);
 		}
-		
+
 		assertEquals(currentLoc.getOrientation(), -Math.PI, 0.01);
 		assertEquals(currentLoc.getX(), 30, 0.05);
 		assertEquals(currentLoc.getY(), 50, 0.05);
@@ -187,56 +180,50 @@ public class TestMoveActionWithOrientation {
 	}
 
 	/**
-	 * Test moving to the goal along the y dimension
-	 * (50, 40)
-	 * (50, 50)
-	 * (50,60)
+	 * Test moving to the goal along the y dimension (50, 40) (50, 50) (50,60)
 	 * 
 	 * @throws SpaceSettlersActionException
 	 */
 	@Test
 	public void testpdControlMoveToAlongY() throws SpaceSettlersActionException {
 		// first positive y (50, 60)
-		Position currentLoc = new Position(50,50);
-		Position goalLoc = new Position(50,60);
+		Position currentLoc = new Position(50, 50);
+		Position goalLoc = new Position(50, 60);
 		currentLoc.setOrientation(Math.PI / 2);
-		
+
 		moveAction = new MoveActionWithOrientation();
-	
+
 		Vector2D accel = moveAction.pdControlMoveToGoal(space, goalLoc, currentLoc, targetVelocity);
 		Movement movement = new Movement();
-		
+
 		while (accel.getMagnitude() > MoveAction.TARGET_REACHED_ACCEL) {
 			movement.setTranslationalAcceleration(accel);
 			currentLoc = space.applyMovement(currentLoc, movement, timestep);
 			accel = moveAction.pdControlMoveToGoal(space, goalLoc, currentLoc, targetVelocity);
 		}
-		
+
 		assertEquals(currentLoc.getOrientation(), Math.PI / 2, 0.01);
 		assertEquals(currentLoc.getX(), 50, 0.05);
 		assertEquals(currentLoc.getY(), 60, 0.05);
 
-	
 		// then to the negative y
-		currentLoc = new Position(50,50);
+		currentLoc = new Position(50, 50);
 		currentLoc.setOrientation(0);
-		goalLoc = new Position(50,40);
+		goalLoc = new Position(50, 40);
 		currentLoc.setOrientation(-Math.PI / 2);
-		
+
 		accel = moveAction.pdControlMoveToGoal(space, goalLoc, currentLoc, targetVelocity);
-		
+
 		while (accel.getMagnitude() > MoveAction.TARGET_REACHED_ACCEL) {
 			movement.setTranslationalAcceleration(accel);
 			currentLoc = space.applyMovement(currentLoc, movement, timestep);
 			accel = moveAction.pdControlMoveToGoal(space, goalLoc, currentLoc, targetVelocity);
 		}
-		
+
 		assertEquals(currentLoc.getOrientation(), -Math.PI / 2, 0.01);
 		assertEquals(currentLoc.getX(), 50, 0.05);
 		assertEquals(currentLoc.getY(), 40, 0.05);
 
 	}
 
-	
-	
 }

@@ -7,7 +7,5 @@ package spacesettlers.objects.resources;
  *
  */
 public enum ResourceTypes {
-	FUEL,
-	WATER,
-	METALS;
+	FUEL, WATER, METALS;
 }

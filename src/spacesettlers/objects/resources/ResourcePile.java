@@ -13,6 +13,7 @@ public class ResourcePile {
 
 	/**
 	 * Initialize with zero resources (can be set using setResource)
+	 * 
 	 * @param resources
 	 */
 	public ResourcePile() {
@@ -20,12 +21,12 @@ public class ResourcePile {
 		resources = new HashMap<ResourceTypes, Integer>();
 		reset();
 	}
-	
+
 	/**
-	 * Initialize resources using the specified amounts 
+	 * Initialize resources using the specified amounts
 	 * 
-	 * @param water initial water
-	 * @param fuel initial fuel
+	 * @param water  initial water
+	 * @param fuel   initial fuel
 	 * @param metals initial metals
 	 */
 	public ResourcePile(int water, int fuel, int metals) {
@@ -35,7 +36,7 @@ public class ResourcePile {
 		resources.put(ResourceTypes.FUEL, fuel);
 		resources.put(ResourceTypes.METALS, metals);
 	}
-	
+
 	/**
 	 * Make a new pile with the same resources as the specified pile
 	 * 
@@ -49,16 +50,15 @@ public class ResourcePile {
 		resources.put(ResourceTypes.METALS, other.getResourceQuantity(ResourceTypes.METALS));
 	}
 
-	
 	/**
-	 * Set the resources 
-	 * @param type the type of resources
+	 * Set the resources
+	 * 
+	 * @param type  the type of resources
 	 * @param value the new value
 	 */
 	public void setResources(ResourceTypes type, int value) {
 		resources.put(type, value);
 	}
-
 
 	/**
 	 * Returns the resources currently held in this pile
@@ -68,7 +68,7 @@ public class ResourcePile {
 	public Map<ResourceTypes, Integer> getResources() {
 		return resources;
 	}
-	
+
 	/**
 	 * Return the quantity of the specified resource
 	 * 
@@ -78,7 +78,7 @@ public class ResourcePile {
 	public int getResourceQuantity(ResourceTypes type) {
 		return resources.get(type);
 	}
-	
+
 	/**
 	 * Adds two resource piles together
 	 * 
@@ -100,7 +100,8 @@ public class ResourcePile {
 	}
 
 	/**
-	 * Double the costs (e.g. how much an item costs, which piles are also used for, in addition to storage)
+	 * Double the costs (e.g. how much an item costs, which piles are also used for,
+	 * in addition to storage)
 	 */
 	public void doubleCosts() {
 		resources.put(ResourceTypes.WATER, resources.get(ResourceTypes.WATER) * 2);
@@ -109,10 +110,12 @@ public class ResourcePile {
 	}
 
 	/**
-	 * Compares this pile to the other pile to see if this pile is greater (used for purchasing)
+	 * Compares this pile to the other pile to see if this pile is greater (used for
+	 * purchasing)
 	 * 
-	 * @param otherPile the pile of costs 
-	 * @return true if this resource pile is greater in all resources than the cost pile
+	 * @param otherPile the pile of costs
+	 * @return true if this resource pile is greater in all resources than the cost
+	 *         pile
 	 */
 	public boolean greaterThan(ResourcePile otherPile) {
 		for (ResourceTypes type : resources.keySet()) {
@@ -141,12 +144,12 @@ public class ResourcePile {
 	 * @return the mass of the resources
 	 */
 	public int getMass() {
-		int mass = (int) (resources.get(ResourceTypes.FUEL) * ResourceFactory.FUEL_DENSITY +
-				resources.get(ResourceTypes.WATER) * ResourceFactory.WATER_DENSITY + 
-				resources.get(ResourceTypes.METALS) * ResourceFactory.METALS_DENSITY);
+		int mass = (int) (resources.get(ResourceTypes.FUEL) * ResourceFactory.FUEL_DENSITY
+				+ resources.get(ResourceTypes.WATER) * ResourceFactory.WATER_DENSITY
+				+ resources.get(ResourceTypes.METALS) * ResourceFactory.METALS_DENSITY);
 		return mass;
 	}
-	
+
 	/**
 	 * Returns the total resources (just a sum, used for scoring)
 	 * 
@@ -159,10 +162,10 @@ public class ResourcePile {
 		}
 		return sum;
 	}
-	
+
 	public String toString() {
-		String str = "Water: " + resources.get(ResourceTypes.WATER) + " Fuel: " + resources.get(ResourceTypes.FUEL) + 
-				" Metals: " + resources.get(ResourceTypes.METALS);
+		String str = "Water: " + resources.get(ResourceTypes.WATER) + " Fuel: " + resources.get(ResourceTypes.FUEL)
+				+ " Metals: " + resources.get(ResourceTypes.METALS);
 		return str;
 	}
 

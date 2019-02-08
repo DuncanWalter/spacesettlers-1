@@ -3,9 +3,8 @@ package spacesettlers.objects.powerups;
 import spacesettlers.objects.AbstractActionableObject;
 
 /**
- * Doubles a ship or base's weapons capacity (then
- * it is removed from the list of valid power ups or else
- * it would be used over and over again)
+ * Doubles a ship or base's weapons capacity (then it is removed from the list
+ * of valid power ups or else it would be used over and over again)
  * 
  * @author amy
  *
@@ -32,5 +31,5 @@ public final class PowerupDoubleWeapon implements SpaceSettlersPowerup {
 	public SpaceSettlersPowerupEnum getType() {
 		return SpaceSettlersPowerupEnum.DOUBLE_WEAPON_CAPACITY;
 	}
-	
+
 }

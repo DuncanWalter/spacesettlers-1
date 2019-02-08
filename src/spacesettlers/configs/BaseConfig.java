@@ -1,7 +1,8 @@
 package spacesettlers.configs;
 
 /**
- * Configuration for the bases 
+ * Configuration for the bases
+ * 
  * @author amy
  */
 public class BaseConfig {
@@ -9,19 +10,19 @@ public class BaseConfig {
 	 * The name of the team to whom this base belongs
 	 */
 	String teamName;
-	
+
 	/**
-	 * Optional: if we want the home-base to be in a fixed location, we can specify it. 
-	 * It defaults to a randomly generated location.
+	 * Optional: if we want the home-base to be in a fixed location, we can specify
+	 * it. It defaults to a randomly generated location.
 	 */
 	boolean fixedLocation = false;
 	int x, y;
-	
+
 	/**
-	 * Used to define starting locations for the team's ships (only used if fixedLocation mode)
+	 * Used to define starting locations for the team's ships (only used if
+	 * fixedLocation mode)
 	 */
 	int boundingBoxULX, boundingBoxULY, boundingBoxLRX, boundingBoxLRY;
-
 
 	public BaseConfig(String teamName) {
 		super();
@@ -37,6 +38,7 @@ public class BaseConfig {
 
 	/**
 	 * Sets the name - used by the ladder
+	 * 
 	 * @param teamName
 	 */
 	public void setTeamName(String teamName) {
@@ -45,6 +47,7 @@ public class BaseConfig {
 
 	/**
 	 * True if it is a fixed location (defaults to false if not specified)
+	 * 
 	 * @return
 	 */
 	public boolean isFixedLocation() {
@@ -53,6 +56,7 @@ public class BaseConfig {
 
 	/**
 	 * Only used if the fixedLocation is true
+	 * 
 	 * @return
 	 */
 	public int getX() {
@@ -78,8 +82,5 @@ public class BaseConfig {
 	public int getBoundingBoxLRY() {
 		return boundingBoxLRY;
 	}
-	
-	
-	
-	
+
 }
