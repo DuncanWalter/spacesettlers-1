@@ -501,10 +501,22 @@ public class Toroidal2DPhysics {
 	 * @return true if the location is free and false otherwise
 	 */
 	public boolean isLocationFree(Position location, int radius) {
+
 		for (AbstractObject object : allObjects) {
-			// fixed bug where it only checked radius and not diameter
-			if (findShortestDistanceVector(object.getPosition(), location)
-					.getMagnitude() <= (radius + (2 * object.getRadius()))) {
+
+			Vector2D translation = findShortestDistanceVector(object.getPosition(), location);
+
+			double minimumFreeRadius = radius + object.getRadius();
+
+			if(Math.abs(translation.getXValue()) > minimumFreeRadius){
+				continue;
+			}
+
+			if(Math.abs(translation.getYValue()) > minimumFreeRadius){
+				continue;
+			}
+
+			if (translation.getMagnitude() <= minimumFreeRadius) {
 				return false;
 			}
 		}

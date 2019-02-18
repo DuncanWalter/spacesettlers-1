@@ -129,7 +129,9 @@ public final class Vector2D implements Serializable, Cloneable {
      * @return The magnitude of the vector.
      */
     public double getMagnitude() {
-    	magnitude = Math.sqrt(x*x + y*y);
+        if(Double.isNaN(magnitude)){
+            magnitude = Math.sqrt(x*x + y*y);
+        }
     	return magnitude;
     }
 
